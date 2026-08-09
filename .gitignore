@@ -1,0 +1,48 @@
+# Filet de sécurité : ce dépôt ne doit jamais contenir un CV réel.
+# Les templates vivent dans cv/assets/ et sont volontairement exclus des règles
+# ci-dessous par la négation en fin de fichier.
+
+cv-master.md
+profil.md
+mots-cles.md
+lettre.md
+cv.md
+
+*.docx
+*.pdf
+*.odt
+*.rtf
+
+# Photos d'identité
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.heic
+
+# Dossiers de travail générés par le skill
+build/
+**/build/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+
+# Éditeurs et OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Archives de distribution
+*.tar.gz
+*.zip
+
+# Les templates doivent rester versionnés malgré les règles ci-dessus.
+!cv/assets/cv-master.template.md
+!cv/assets/profil.template.md
