@@ -16,8 +16,8 @@ photo: photo.png
 ```
 
 Clés reconnues : `name` (obligatoire), `title`, `contact`, `photo`.
-`photo` est résolu relativement au dossier du fichier markdown, puis au workspace
-`~/Documents/cv/`. L'omettre (ou passer `--no-photo`) produit un CV sans photo.
+`photo` est résolu relativement au dossier du fichier markdown, puis au dossier
+parent (le workspace, pour une variante `<societe>/cv.md`). L'omettre (ou passer `--no-photo`) produit un CV sans photo.
 
 Le `title` est le premier signal de matching ATS : il doit reprendre l'intitulé de
 l'offre visée, pas décrire une identité intemporelle.

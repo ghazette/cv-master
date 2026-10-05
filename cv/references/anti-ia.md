@@ -10,7 +10,7 @@ cadratin et sans point-virgule.
 
 Priorité en cas d'hésitation : **entre une phrase élégante et une phrase
 spécifique, prendre la spécifique**. L'objectif n'est pas un texte bien écrit,
-c'est un texte que seul l'utilisateur aurait pu écrire.
+c'est un texte que seul le candidat aurait pu écrire.
 
 Contrôle mécanique : `python3 $CV/scripts/anti_ia_check.py <fichier.md>`.
 Le script compte ce qui se compte. Le reste relève du jugement, avec ce fichier.
@@ -20,7 +20,7 @@ Le script compte ce qui se compte. Le reste relève du jugement, avec ce fichier
 ## Articulation avec « Zéro invention »
 
 Rien ici n'autorise à fabriquer. Le détail concret qui rend un texte humain doit
-sortir de l'utilisateur, pas du modèle. Quand il manque, la conduite est de **poser
+sortir du candidat, pas du modèle. Quand il manque, la conduite est de **poser
 une question**, jamais de combler avec un adjectif ou un chiffre plausible.
 
 Un chiffre halluciné détruit plus de crédibilité que dix lignes plates, et il
@@ -37,7 +37,7 @@ rendement décroissant :
 5. Quelle contrainte matérielle ou métier a dicté l'architecture ?
 
 La question 1 est la plus rentable. La question 5 est celle qui produit les
-métriques d'ingénierie que la posture cofondateur privilégie.
+métriques d'ingénierie que la règle « Contrôler le récit » privilégie.
 
 ---
 
@@ -72,10 +72,10 @@ et laisse la prose respirer.
 **Trois, jamais de glose dans une lettre de motivation.** Une lettre n'est pas
 parsée par un ATS. La glose y est du bruit pur.
 
-Application au CV actuel :
+Exemples d'application :
 
 - `viewer 3D BIM (Building Information Modeling)` devient `viewer BIM`, et
-  `BIM (Building Information Modeling)` apparaît dans la ligne 3D de COMPÉTENCES.
+  `BIM (Building Information Modeling)` apparaît dans la ligne de COMPÉTENCES.
 - `classement ELO (classement par niveau)` devient `classement ELO`. Le
   développement répète le mot classement, ce qui est lisible à l'oeil nu comme
   une sortie de modèle.
@@ -170,7 +170,7 @@ qu'aucun chiffre ne suit. Test : la phrase survit-elle à la question combien ?
 
 **Le zéro-chiffre.** Un CV technique sans une seule métrique est aussi suspect
 qu'un CV bourré de +40 %. Viser 3 à 6 nombres, non ronds ou contre-intuitifs.
-Conformément à la posture cofondateur, prendre des métriques d'ingénierie
+Conformément à la règle « Contrôler le récit », prendre des métriques d'ingénierie
 (débit, latence, volumétrie, disponibilité) et non des métriques business.
 
 **La redondance de la liste de compétences.** Aucune techno dans deux rubriques.
@@ -191,9 +191,8 @@ compétence est réelle, elle doit déjà exister dans le master.
 
 ## Ce qui n'est pas un marqueur : la signature assumée
 
-Une lettre peut se signer « Prénom Nom & Claude », si `profil.md` porte cette
-consigne explicite.
-Ce fichier traque les marqueurs involontaires, ceux d'un texte présenté comme
+Si `profil.md` définit une signature qui mentionne Claude (par exemple
+« Prénom Nom & Claude »), elle est une consigne explicite du candidat. Ce fichier traque les marqueurs involontaires, ceux d'un texte présenté comme
 entièrement écrit par son auteur. Une mention revendiquée ne relève pas de cette
 catégorie et ne se retire pas. Le reste du fichier s'applique sans changement :
 l'objectif n'est pas de dissimuler l'outil, c'est d'écrire une lettre qui dise
@@ -257,16 +256,13 @@ ceci. Au moins quatre par candidature, tous issus de faits réels du master.
    Le problème était que, suivie d'un fait et jamais d'une généralité.
 6. **Le registre parlé maîtrisé.** Une tournure orale par lettre, pas plus.
 
-Trois exemples du niveau de texture visé :
+Exemples de textures qui fonctionnent, à prendre comme étalon :
 
 - `je suis à l'aise sans framework`, affirmation qui prend un risque
-- l'enchaînement activité annexe autonome vers disponibilité pour un temps plein,
-  qui répond à une objection que le recruteur n'a pas posée
-- `Conversion de maquettes issues d'un SDK CAO propriétaire vers un format
-  optimisé pour le web`, trop spécifique pour avoir été inventé
-
-Le point commun : chacun sort d'un fait du master, aucun ne pourrait être écrit
-par un modèle qui ne connaît pas le dossier.
+- une phrase qui répond à une objection que le recruteur n'a pas encore posée
+  (voir la section Posture de `profil.md`)
+- `Conversion de maquettes C++ (SDK d'un éditeur CAO) vers un format optimisé
+  pour le web`, trop spécifique pour avoir été inventé
 
 ---
 
@@ -293,8 +289,8 @@ Exécuter, corriger, ne pas afficher la passe sauf demande explicite de relectur
 8. **Test des longueurs.** Si tous les paragraphes tiennent à 20 % les uns des
    autres, en couper un de moitié.
 
-La ligne École 42 du master est le cas test de référence de ce fichier. Dans sa
-version actuelle elle est du soft skill pur, interchangeable avec n'importe quel
-candidat 42, et elle échoue aux tests 1 et 2. Version qui passe :
-`C, C++, systèmes Unix, pas de cours magistraux.` Ou rien, 42 se passe de
-commentaire.
+Cas test typique : une ligne de formation du genre « École X : autonomie,
+travail en équipe, apprentissage par projets ». C'est du soft skill pur,
+interchangeable avec n'importe quel autre diplômé, et elle échoue aux tests 1
+et 2. Version qui passe : ce qu'on y a réellement pratiqué (`C, C++, systèmes
+Unix, pas de cours magistraux.`), ou rien si le nom de l'école suffit.

@@ -23,6 +23,11 @@ cv.md
 # Dossiers de travail générés par le skill
 build/
 **/build/
+import/
+cv-extrait.txt
+
+# Config locale écrite par l'init (chemin du workspace)
+cv/config.json
 
 # Python
 __pycache__/

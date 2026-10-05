@@ -14,15 +14,44 @@ faits plus un rendu ciblé**. Le master contient tous les faits vérifiables. Ch
 candidature en extrait une projection réordonnée. On n'invente jamais un fait
 pour une offre, on choisit lesquels remonter.
 
+## Première utilisation
+
+```bash
+CV=~/.claude/skills/cv
+cat $CV/config.json          # {"workspace": "..."}, écrit par l'init
+```
+
+**`config.json` absent** : le skill n'est pas initialisé. Demande à l'utilisateur
+où se trouve son CV actuel, puis lance
+`python3 $CV/scripts/init.py --yes --workspace <dossier> --cv <fichier>`
+(`--workspace` vaut `~/Documents/cv` par défaut, `--cv` est facultatif). L'init
+crée le workspace, copie les deux templates, copie le CV d'origine dans
+`import/` et en extrait le texte dans `import/cv-extrait.txt`.
+
+**`cv-master.md` contient encore `<!-- TEMPLATE`** : le master n'est pas rempli.
+Si `import/cv-extrait.txt` existe, construis le master à partir de ce texte en
+respectant `references/cv-markdown.md`, puis retire la ligne marqueur. Sinon,
+interroge l'utilisateur : identité, contact, chaque poste avec dates et stack,
+formation, langues. Un fait par question quand il hésite. Tant qu'une case reste
+vide, elle reste vide : un CV avec un trou déclaré vaut mieux qu'un CV avec un
+trou comblé par le modèle. Un extrait PDF mélange parfois l'ordre des blocs,
+fais valider dates et intitulés avant de passer à la suite.
+
+`profil.md` porte ce qui n'est pas un fait de CV mais oriente chaque rendu : cible
+de poste, secteurs visés, contraintes de mobilité, objections à traiter en
+lettre, préférences de ton, signature. Relis-le avant chaque adaptation, et
+remplis ses sections vides en interrogeant l'utilisateur.
+
 ## Où vivent les fichiers
 
-Workspace : `~/Documents/cv/`.
+Workspace : le chemin de `$CV/config.json`, noté `$W` ci-dessous.
 
 ```
-~/Documents/cv/
+$W/
 ├── cv-master.md           # source de vérité, tous les faits, jamais tronquée
 ├── profil.md              # préférences et posture, lu à chaque session
 ├── photo.png              # photo, optionnelle
+├── import/                # CV d'origine + cv-extrait.txt, lecture seule
 ├── build/                 # rendu du master (cv.docx, cv.pdf)
 └── <societe>/
     ├── cv.md              # projection ciblée (dérivée du master)
@@ -34,32 +63,20 @@ Workspace : `~/Documents/cv/`.
 Le master ne rétrécit jamais. Si un fait est coupé d'une variante, il reste dans
 le master : la prochaine offre en aura peut-être besoin.
 
-## Première utilisation
-
-Si `~/Documents/cv/cv-master.md` n'existe pas, ne devine rien. Copie
-`assets/cv-master.template.md` et `assets/profil.template.md` depuis le dossier du
-skill vers le workspace, puis interroge l'utilisateur pour les remplir : identité,
-contact, chaque poste avec dates et stack, formation, langues. Un fait par
-question quand il hésite. Tant qu'une case reste vide, elle reste vide : un CV
-avec un trou déclaré vaut mieux qu'un CV avec un trou comblé par le modèle.
-
-`profil.md` porte ce qui n'est pas un fait de CV mais oriente chaque rendu : cible
-de poste, secteurs visés, contraintes de mobilité, sujets sensibles à traiter en
-lettre, préférences de ton. Relis-le avant chaque adaptation.
-
 ## La boucle
 
 ```bash
 CV=~/.claude/skills/cv
+W=$(python3 -c "import json;print(json.load(open('$CV/config.json'))['workspace'])")
 
 # 1. rendre (docx + pdf + vérification d'extraction ATS)
-python3 $CV/scripts/build_cv.py ~/Documents/cv/cv-master.md --pdf
+python3 $CV/scripts/build_cv.py $W/cv-master.md --pdf
 
 # 2. auditer mécaniquement le rendu (--letter sur une lettre : pas de rubriques de CV)
-python3 $CV/scripts/ats_check.py ~/Documents/cv/build/cv.pdf
+python3 $CV/scripts/ats_check.py $W/build/cv.pdf
 
 # 3. auditer la signature IA des sources markdown, avant rendu
-python3 $CV/scripts/anti_ia_check.py ~/Documents/cv/<societe>/cv.md ~/Documents/cv/<societe>/lettre.md
+python3 $CV/scripts/anti_ia_check.py $W/<societe>/cv.md $W/<societe>/lettre.md
 ```
 
 `build_cv.py` refuse structurellement de produire du non-ATS : une seule colonne,

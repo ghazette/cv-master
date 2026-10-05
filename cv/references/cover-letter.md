@@ -24,11 +24,10 @@ optimisation, migrations de schéma). Les concepts sont transposables et la
 montée en compétence sur le dialecte T-SQL est une affaire de semaines. » Traiter le gap
 soi-même le désamorce. Le laisser découvrir le transforme en objection.
 
-**4. La disponibilité et la clôture.** C'est le paragraphe qui porte l'objection
-principale identifiée dans `profil.md` : activité annexe qui tourne en autonomie,
-trou d'emploi déjà rempli, reconversion assumée. Un exemple concret. Le CDD
-de 2026 le prouve factuellement. Puis une phrase de disponibilité et d'ouverture
-à l'échange.
+**4. La disponibilité et la clôture.** Ce paragraphe porte la posture définie
+dans `profil.md` : la ligne qui répond à l'objection principale du recruteur
+(reconversion, trou dans le CV, activité à côté, mobilité...), avec le fait qui
+la prouve. Puis une phrase de disponibilité et d'ouverture à l'échange.
 
 ## Ton
 
@@ -42,15 +41,12 @@ lève pas une objection doit disparaître.
 
 ## Signature
 
-Par défaut, une lettre se signe du seul nom de l'utilisateur.
+La lettre se signe avec la valeur `Signature` de `profil.md`. Par défaut,
+le nom du candidat seul. Si le candidat a choisi une signature revendiquant l'IA
+(« Prénom Nom & Claude »), c'est une consigne explicite, pas un oubli.
 
-Certains préfèrent une co-signature assumée du type **« Prénom Nom & Claude »**,
-pour revendiquer publiquement le travail avec une IA plutôt que de le taire. Ce
-n'est jamais à décider à sa place : la consigne doit figurer explicitement dans
-`profil.md`. En son absence, signature simple.
-
-Ne la retire jamais, et ne la signale pas non plus comme un problème à chaque
-passe. Elle ne contredit pas `anti-ia.md` : ce fichier combat les marqueurs
+Ne la modifie jamais, et ne la signale pas non plus comme un problème à chaque
+passe. Une signature revendiquée ne contredit pas `anti-ia.md` : ce fichier combat les marqueurs
 *involontaires*, ceux qui trahissent un texte que l'auteur fait passer pour
 entièrement sien. Une signature revendiquée est l'inverse, un choix assumé. Le
 travail sur le lexique et les structures reste entièrement pertinent, parce qu'il
@@ -58,7 +54,7 @@ ne sert pas à cacher l'outil mais à produire une lettre qui dit quelque chose.
 
 ## Livrable
 
-`~/Documents/cv/<societe>/lettre.md`, en texte brut prêt à coller dans un corps
+`<workspace>/<societe>/lettre.md`, en texte brut prêt à coller dans un corps
 de mail si l'offre donne une adresse directe, souvent le meilleur canal car il
 court-circuite l'ATS et atteint un humain. Si l'offre demande une pièce jointe :
 

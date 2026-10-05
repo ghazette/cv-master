@@ -64,12 +64,18 @@ vérification d'extraction, seulement le `.docx`.
 ```bash
 git clone https://github.com/ghazette/cv-master.git
 cd cv-master
-./install.sh
+./install.sh --cv ~/Téléchargements/mon-cv.pdf
 ```
 
-Le script copie `cv/` vers `~/.claude/skills/cv`, crée `~/Documents/cv/` et y
-dépose les deux templates. Il refuse d'écraser un `cv-master.md` existant, et
-affiche l'état des quatre dépendances.
+Le script copie `cv/` vers `~/.claude/skills/cv`, installe `python-docx` s'il
+manque, puis lance l'init (`cv/scripts/init.py`), qui :
+
+- crée le workspace (`~/Documents/cv/` par défaut) avec `import/` et `build/`,
+- importe ton CV existant et en extrait le texte,
+- dépose `cv-master.md` et `profil.md` depuis les templates, sans jamais écraser
+  un fichier déjà rempli,
+- écrit `~/.claude/skills/cv/config.json`, qui indique au skill où est le workspace,
+- affiche l'état des dépendances.
 
 Pour n'installer le skill que sur un projet plutôt que globalement :
 
@@ -77,27 +83,65 @@ Pour n'installer le skill que sur un projet plutôt que globalement :
 ./install.sh --project     # vers ./.claude/skills/cv
 ```
 
-Installation manuelle, équivalente :
+Relancer l'init seule, par exemple après avoir déposé un nouveau CV :
+
+```bash
+python3 ~/.claude/skills/cv/scripts/init.py
+```
+
+Options : `--workspace <dossier>`, `--cv <fichier>`, `--photo <image>`, `--name`,
+`--title`, `--contact`, `--signature`, `--yes` (non interactif, valeurs par
+défaut). Elles passent aussi par `./install.sh`.
+
+### Où placer ton CV pendant l'init
+
+Trois façons, au choix :
+
+1. **En argument** : `./install.sh --cv /chemin/vers/mon-cv.pdf`. Le fichier est
+   copié dans `<workspace>/import/`, l'original n'est pas touché.
+2. **En réponse à la question** : sans `--cv`, l'init interactive demande le
+   chemin du CV.
+3. **À la main** : dépose le fichier dans `<workspace>/import/` (par défaut
+   `~/Documents/cv/import/`), puis relance l'init. S'il y en a plusieurs, le plus
+   récent est pris.
+
+Formats acceptés : `.pdf` à texte (pas un scan), `.docx`, `.odt`, `.doc`, `.rtf`,
+`.txt`, `.md`. Le texte extrait atterrit dans `import/cv-extrait.txt`. S'il est
+quasi vide, le PDF est probablement une image : fournis plutôt le `.docx`, ou
+colle le texte directement à Claude.
+
+**Photo** (optionnelle) : `--photo ~/ma-photo.jpg`, ou un fichier `photo.jpg` /
+`photo.png` posé à la racine du workspace avant l'init.
+
+Pas de CV existant ? Lance l'init sans `--cv`, le master reste un squelette que
+Claude remplit avec toi par questions.
+
+Installation manuelle, sans init (workspace par défaut `~/Documents/cv`) :
 
 ```bash
 mkdir -p ~/.claude/skills ~/Documents/cv
 cp -r cv ~/.claude/skills/cv
 cp cv/assets/cv-master.template.md ~/Documents/cv/cv-master.md
 cp cv/assets/profil.template.md    ~/Documents/cv/profil.md
+echo '{"workspace": "'"$HOME"'/Documents/cv"}' > ~/.claude/skills/cv/config.json
 ```
 
 ---
 
 ## Démarrage
 
-Remplir `~/Documents/cv/cv-master.md` avec ses vrais faits, puis `profil.md` avec
-sa cible et ses objections. Ou bien ouvrir Claude Code et dire :
+Ouvre Claude Code dans le workspace et dis :
+
+> construis mon cv-master à partir de mon CV importé
+
+ou, sans CV importé :
 
 > aide-moi à remplir mon CV master
 
-Claude pose les questions une par une et écrit le fichier. Tant qu'une case reste
-vide, elle reste vide : un CV avec un trou déclaré vaut mieux qu'un CV avec un
-trou comblé par le modèle.
+Claude convertit l'extrait au format du master, fait valider dates et intitulés,
+pose les questions une par une sur ce qui manque, puis complète `profil.md`.
+Tant qu'une case reste vide, elle reste vide : un CV avec un trou déclaré vaut
+mieux qu'un CV avec un trou comblé par le modèle.
 
 Ensuite :
 
@@ -133,6 +177,7 @@ la preuve qu'il ne coûtera rien à l'employeur.
 ├── cv-master.md           # source de vérité, tous les faits
 ├── profil.md              # cible, objections, ton
 ├── photo.png              # optionnelle
+├── import/                # CV d'origine + cv-extrait.txt
 ├── build/                 # cv.docx, cv.pdf du master
 └── <societe>/
     ├── cv.md              # projection ciblée
@@ -180,7 +225,7 @@ cv.pdf
 ## Contenu du dépôt
 
 ```
-├── install.sh                     # installation globale ou par projet
+├── install.sh                     # installation globale ou par projet, puis init
 ├── LICENSE
 └── cv/
     ├── SKILL.md                   # doctrine et boucle de travail
@@ -194,13 +239,14 @@ cv.pdf
     │   ├── anti-ia.md             # marqueurs de texte généré
     │   └── cv-markdown.md         # syntaxe du markdown accepté
     └── scripts/
+        ├── init.py                # workspace, import du CV, config.json
         ├── build_cv.py
         ├── ats_check.py
         └── anti_ia_check.py
 ```
 
 Le `.gitignore` exclut agressivement `cv-master.md`, `profil.md`, les `.docx`,
-`.pdf` et les images, pour qu'un utilisateur qui travaille depuis un clone ne
+`.pdf`, les images, `import/` et `cv/config.json`, pour qu'un utilisateur qui travaille depuis un clone ne
 puisse pas committer son CV réel par accident. Les deux templates sont
 réintroduits par une négation en fin de fichier.
 

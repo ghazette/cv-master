@@ -5,10 +5,12 @@ contact: prenom.nom@example.com · 06 12 34 56 78 · Ville · Disponibilité
 photo: photo.png
 ---
 
+<!-- TEMPLATE : master non rempli. Claude le construit depuis import/cv-extrait.txt puis retire cette ligne. -->
+
 <!--
 Ceci est le MASTER. Il contient tous les faits vérifiables, il ne rétrécit jamais.
 On n'envoie jamais ce fichier tel quel : chaque candidature en dérive une
-projection dans ~/Documents/cv/<societe>/cv.md.
+projection dans <workspace>/<societe>/cv.md.
 
 Retirer la clé `photo:` si aucune photo. Sur le marché anglo-saxon, retirer aussi
 la photo et la date de naissance : elles y sont un motif d'écartement.

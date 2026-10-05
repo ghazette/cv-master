@@ -5,7 +5,7 @@ Une seule colonne, aucun tableau, aucune zone de texte : tout ce qui casse le
 parsing des ATS est structurellement impossible à produire ici.
 
     python3 build_cv.py cv-master.md --pdf
-    python3 build_cv.py societe/cv.md --pdf --no-photo
+    python3 build_cv.py <societe>/cv.md --pdf --no-photo
 
 Syntaxe d'entrée : voir references/cv-markdown.md
 """
@@ -23,7 +23,6 @@ from docx.oxml import OxmlElement, parse_xml
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
 
-WORKSPACE = Path.home() / "Documents" / "cv"
 
 FONT = "Calibri"
 BODY_PT = 10
@@ -51,7 +50,7 @@ def parse_source(path: Path):
 
 
 def resolve_photo(name: str, source_dir: Path):
-    for candidate in (source_dir / name, WORKSPACE / name, Path(name)):
+    for candidate in (source_dir / name, source_dir.parent / name, Path(name).expanduser()):
         if candidate.is_file():
             return candidate
     return None

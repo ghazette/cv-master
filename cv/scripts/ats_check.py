@@ -4,8 +4,8 @@
 Ne juge pas le contenu : mesure uniquement ce qu'une machine verrait du document.
 Les items 2, 3, 5 et 6 de la grille d'audit se tranchent avec cette sortie.
 
-    python3 ats_check.py ~/Documents/cv/build/cv.pdf
-    python3 ats_check.py ~/Documents/cv/societe/build/lettre.pdf --letter
+    python3 ats_check.py <workspace>/build/cv.pdf
+    python3 ats_check.py <workspace>/<societe>/build/lettre.pdf --letter
 """
 
 import re

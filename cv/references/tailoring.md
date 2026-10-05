@@ -16,7 +16,7 @@ Extrais dans cet ordre :
 - **le secteur et ses contraintes** (fintech, donc réglementaire, conformité,
   sécurité),
 - **les outils de process** (Git, Jira, Confluence, Slack, pull requests),
-- **les « nice to have »**, points gratuits quand le candidat les a.
+- **les « nice to have »**, points gratuits quand l'utilisateur les a.
 
 Le secteur est le gisement le plus souvent raté. Une fintech « fortement
 réglementée » cherche quelqu'un qui a déjà vécu la contrainte réglementaire.
@@ -77,13 +77,13 @@ hiérarchie de lecture.
 
 ## 4. Livrables
 
-Dans `~/Documents/cv/<societe>/` :
+Dans `<workspace>/<societe>/` :
 
 - `cv.md` plus `build/cv.docx` et `build/cv.pdf`,
 - `mots-cles.md`, les 40 mots-clés en trois colonnes (présent, ajouté, gap), les
   gaps assortis de leur stratégie de traitement, et les points que l'utilisateur doit
   vérifier lui-même avant envoi (« as-tu vraiment utilisé Composer ? », « quelle
-  version de PHP chez cet employeur ? »),
+  version de PHP chez tel employeur ? »),
 - `lettre.md` si demandée.
 
 Termine par la grille d'audit (`ats-audit.md`) notée **face à l'offre**, et
