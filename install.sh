@@ -44,6 +44,21 @@ for skill in cv jobsearch candidature; do
   echo "  skill $skill installé"
 done
 
+# Skill tiers : stop-slop, passe anti-tournures IA sur les CV et lettres.
+if [[ -e "$SKILLS_DIR/stop-slop" ]]; then
+  echo "  skill stop-slop déjà présent"
+elif command -v npx >/dev/null; then
+  # le code retour est non nul si un autre agent que Claude refuse l'install globale
+  npx -y skills add hardikpandya/stop-slop -g -y >/dev/null 2>&1 || true
+  if [[ -e "$HOME/.claude/skills/stop-slop" ]]; then
+    echo "  skill stop-slop installé"
+  else
+    echo "  stop-slop : échec, lance « npx skills add hardikpandya/stop-slop -g -y »"
+  fi
+else
+  echo "  stop-slop non installé (Node.js manquant) : npx skills add hardikpandya/stop-slop -g -y"
+fi
+
 python3 -c "import docx" 2>/dev/null || {
   echo "  python-docx manquant, installation..."
   python3 -m pip install --user python-docx lxml \

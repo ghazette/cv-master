@@ -127,6 +127,16 @@ nominal, l'isométrie des paragraphes, et les phrases dupliquées entre le CV et
 la lettre quand on lui passe les deux fichiers. Il signale, il ne corrige pas.
 La grille de jugement est dans `references/anti-ia.md`.
 
+**Passe stop-slop obligatoire** sur chaque `cv.md` et `lettre.md` avant le rendu :
+charge le skill **stop-slop** (installé par `install.sh`) et applique-le au texte
+français. Cible prioritaire, le contraste binaire par négation : « X, pas Y »,
+« ce n'est pas X, c'est Y », « non pas X mais Y », « pas seulement X, aussi Y ».
+On énonce Y directement. `les décisions qui comptaient étaient des décisions de
+coût ou de fiabilité, pas de modèle` devient `les décisions qui comptaient
+portaient sur le coût et la fiabilité`. Les aveux de gaps (« jamais utilisé
+l'outil X ») restent : ce sont des faits. Si le skill n'est pas installé :
+`npx skills add hardikpandya/stop-slop -g -y`.
+
 ## Les deux modes
 
 **Mode 1, CV seul.** L'utilisateur demande un audit, ou colle son CV sans offre.
