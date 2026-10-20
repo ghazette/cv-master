@@ -9,13 +9,15 @@ précisément ce qui casse les ATS.
 ```markdown
 ---
 name: Prénom Nom
-title: Développeur Full Stack · JavaScript / TypeScript · Vue.js · Node.js · Python
+title: Chargée de clientèle · Relation client · CRM Salesforce · Anglais
 contact: prenom.nom@example.com · 06 12 34 56 78 · France · Disponible immédiatement
 photo: photo.png
 ---
 ```
 
 Clés reconnues : `name` (obligatoire), `title`, `contact`, `photo`.
+Une première ligne `<!-- TEMPLATE ... -->` signale le modèle vide des assets :
+`build_cv.py` refuse alors de rendre, et le skill lance l'onboarding.
 `photo` est résolu relativement au dossier du fichier markdown, puis au workspace
 `~/Documents/cv/`. L'omettre (ou passer `--no-photo`) produit un CV sans photo.
 
@@ -31,9 +33,10 @@ l'offre visée, pas décrire une identité intemporelle.
 | `#### Intitulé du poste` | Ligne de poste, italique |
 | `- texte` | Puce |
 | `> Stack : A · B · C` | Ligne de stack, petite et grise |
-| `**Backend** : PHP, SQL` | Ligne de compétence, libellé en gras |
+| `**Logiciels** : Sage, Excel` | Ligne de compétence, libellé en gras |
 | texte simple | Paragraphe |
 | `<!-- pagebreak -->` | Saut de page forcé |
+| `<!-- commentaire -->` | Ignoré au rendu, sur une ou plusieurs lignes |
 
 `**gras**` fonctionne à l'intérieur des puces et des paragraphes.
 
@@ -46,29 +49,30 @@ sans créer de faux retours à la ligne dans le rendu.
 ```markdown
 ---
 name: Prénom Nom
-title: Développeur Web PHP / Full Stack · PHP · SQL · JavaScript · API REST
-contact: prenom.nom@example.com · 06 12 34 56 78 · Région lyonnaise
+title: Technicien de maintenance industrielle · Électrotechnique · Automatismes · GMAO
+contact: prenom.nom@example.com · 06 12 34 56 78 · Région nantaise
 ---
 
 ## PROFIL
 
-Développeur full stack, 6+ ans d'expérience, autonome de la conception à la mise
-en production.
+Technicien de maintenance, 8 ans en agroalimentaire, dépannage électrique et
+pneumatique sur lignes de conditionnement, astreintes de nuit.
 
 ## COMPÉTENCES TECHNIQUES
 
-**Backend** : PHP 8, API REST, Composer, PSR-4
-**Bases de données** : PostgreSQL, MariaDB / MySQL, SQL avancé
+**Électrotechnique** : armoires de commande, variateurs, habilitation BR
+**Logiciels** : GMAO (Gestion de Maintenance Assistée par Ordinateur), Excel
 
 ## EXPÉRIENCE PROFESSIONNELLE
 
-### Nom de l'employeur | Juil 2020 – Fév 2024 · CDI · 3 ans 7 mois
-#### Développeur Full Stack
+### Entreprise A, Nantes | Mars 2019 – Sept 2023 · CDI · 4 ans 6 mois
+#### Technicien de maintenance
 
-- Développement backend PHP / SQL du produit de GED (Gestion Électronique de Documents).
-- Mise en place d'une architecture distribuée (RabbitMQ, microservices).
+- Dépannage de 6 lignes de conditionnement en 3x8, une astreinte de nuit par semaine.
+- Les arrêts de la ligne 4 revenaient chaque lundi : remplacement du capteur
+  incriminé et plan de graissage revu, 3 arrêts par mois au lieu de 11.
 
-> Stack : PHP · PostgreSQL · Vue 2 · TypeScript · RabbitMQ · Unity 3D · C++
+> Outils : GMAO · Schneider · Siemens S7 · caméra thermique
 ```
 
 ## Contrôler la pagination

@@ -1,0 +1,15 @@
+{
+  "_doc": {
+    "_": "Modèle de ~/Documents/jobsearch/profile.json : poids du pré-score, à dériver de ~/Documents/cv/cv-master.md pendant l'onboarding (references/onboarding.md, étape 5). Les motifs sont des regex appliquées au texte en minuscules SANS accents. Après une modification : `run.py --rescore`.",
+    "roles": "Métiers visés, reconnus dans le TITRE de l'offre. points : 40 pour la cible exacte, 20 à 30 pour un métier voisin, 10 à 15 pour un titre générique du domaine. needs (optionnel) : regex qui doit figurer dans le titre ou la description, sinon points_if_missing (ex. un titre « full stack » qui ne cite pas la stack du CV).",
+    "skills": "Compétences du CV : [regex, poids, libellé]. Poids 5-6 pour le cœur du profil (prouvé en production), 3-4 pour le solide, 1-2 pour le secondaire. Total plafonné à skills_cap.",
+    "penalties": "Ce qui éloigne du profil : {pattern, points (négatif), label, where: title|text, unless (regex sur le texte qui annule), unless_title (regex sur le titre qui annule)}. Typiquement : stack principale concurrente, poste junior si le CV est senior, métier voisin non voulu.",
+    "experience_years": "Années d'expérience pertinentes du CV : une offre qui en demande jusqu'à +2 garde tous ses points de séniorité, jusqu'à +4 la moitié.",
+    "_exemple": "Pour un développeur backend Python senior : roles [{\"name\": \"Backend Python\", \"points\": 40, \"title\": [\"back[ -]?end|backend|python\"], \"needs\": \"python|django|fastapi\", \"points_if_missing\": 15}, {\"name\": \"Dev généraliste\", \"points\": 12, \"title\": [\"developpeur|developer|engineer|ingenieur\"]}] ; skills [[\"python\", 6, \"Python\"], [\"django\", 4, \"Django\"], [\"postgres\", 3, \"PostgreSQL\"], [\"docker|kubernetes\", 1, \"Conteneurs\"]] ; penalties [{\"pattern\": \"\\\\b(java|\\\\.net|php)\\\\b\", \"points\": -12, \"label\": \"stack différente\", \"where\": \"title\", \"unless_title\": \"python\"}, {\"pattern\": \"\\\\bjunior\\\\b|debutant\", \"points\": -15, \"label\": \"poste junior\", \"where\": \"title\"}]."
+  },
+  "experience_years": null,
+  "roles": [],
+  "skills_cap": 35,
+  "skills": [],
+  "penalties": []
+}

@@ -1,6 +1,6 @@
 ---
 name: cv
-description: Itération rapide sur le CV de l'utilisateur. Audit ATS noté sur 20, adaptation ciblée à une offre d'emploi, matching des mots-clés recruteur, génération .docx + .pdf ATS-safe, et rédaction de lettre de motivation. Utilise ce skill dès que l'utilisateur parle de son CV, de son resume, d'une candidature, d'un entretien à préparer, d'une offre d'emploi qu'il colle dans le chat, d'ATS, de mots-clés recruteur, de lettre de motivation, ou demande simplement « est-ce que je matche ? », même s'il ne prononce jamais le mot « CV ».
+description: Création et itération rapide sur le CV de l'utilisateur, y compris à partir de zéro (entretien guidé, ou import d'un CV existant en PDF, Word ou export LinkedIn). Audit ATS noté sur 20, adaptation ciblée à une offre d'emploi, matching des mots-clés recruteur, génération .docx + .pdf ATS-safe, et rédaction de lettre de motivation. Utilise ce skill dès que l'utilisateur parle de son CV, de son resume, d'une candidature, d'un entretien à préparer, d'une offre d'emploi qu'il colle dans le chat, d'ATS, de mots-clés recruteur, de lettre de motivation, dit qu'il n'a pas encore de CV ou veut en créer un, ou demande simplement « est-ce que je matche ? », même s'il ne prononce jamais le mot « CV ».
 ---
 
 # CV, boucle d'itération rapide
@@ -13,6 +13,34 @@ L'idée directrice : **le CV n'est pas un document, c'est une base de données d
 faits plus un rendu ciblé**. Le master contient tous les faits vérifiables. Chaque
 candidature en extrait une projection réordonnée. On n'invente jamais un fait
 pour une offre, on choisit lesquels remonter.
+
+## Premier lancement (à vérifier avant toute autre action)
+
+Avant un audit, une adaptation ou une lettre, vérifie que le master existe et
+qu'il est rempli :
+
+```bash
+f=~/Documents/cv/cv-master.md
+[ ! -s "$f" ] || head -n 1 "$f" | grep -q '^<!-- TEMPLATE' && echo "onboarding"
+```
+
+Si la commande affiche `onboarding`, le master est absent ou encore le modèle
+vide : **ne lance pas l'audit**, lis `references/onboarding.md` et déroule-le.
+Deux entrées possibles, au choix de l'utilisateur :
+
+- **A, il a déjà un CV** (PDF, Word, texte, export LinkedIn) : extraction avec
+  `scripts/extract_cv.py`, puis questions ciblées sur les trous seulement.
+- **B, il n'a rien** : entretien guidé en sept blocs courts (identité et
+  contact, poste visé, expériences une par une, formation, compétences,
+  langues, préférences), avec AskUserQuestion pour les choix fermés.
+
+Dans les deux cas : aucun fait inventé, chaque chiffre confirmé par
+l'utilisateur, écriture de `cv-master.md` et `profil.md` dans `~/Documents/cv/`
+(en retirant la ligne `<!-- TEMPLATE`), puis premier rendu et audit ATS.
+
+Si l'utilisateur colle une offre alors que le master est vide, dis-le-lui : on
+construit d'abord le master, l'offre servira juste après. Si seul `profil.md`
+est absent ou modèle, fais seulement le bloc 7 de l'onboarding.
 
 ## Où vivent les fichiers
 
@@ -34,15 +62,6 @@ Workspace : `~/Documents/cv/`.
 Le master ne rétrécit jamais. Si un fait est coupé d'une variante, il reste dans
 le master : la prochaine offre en aura peut-être besoin.
 
-## Première utilisation
-
-Si `~/Documents/cv/cv-master.md` n'existe pas, ne devine rien. Copie
-`assets/cv-master.template.md` et `assets/profil.template.md` depuis le dossier du
-skill vers le workspace, puis interroge l'utilisateur pour les remplir : identité,
-contact, chaque poste avec dates et stack, formation, langues. Un fait par
-question quand il hésite. Tant qu'une case reste vide, elle reste vide : un CV
-avec un trou déclaré vaut mieux qu'un CV avec un trou comblé par le modèle.
-
 `profil.md` porte ce qui n'est pas un fait de CV mais oriente chaque rendu : cible
 de poste, secteurs visés, contraintes de mobilité, sujets sensibles à traiter en
 lettre, préférences de ton. Relis-le avant chaque adaptation.
@@ -60,11 +79,17 @@ python3 $CV/scripts/ats_check.py ~/Documents/cv/build/cv.pdf
 
 # 3. auditer la signature IA des sources markdown, avant rendu
 python3 $CV/scripts/anti_ia_check.py ~/Documents/cv/<societe>/cv.md ~/Documents/cv/<societe>/lettre.md
+
+# onboarding uniquement : extraire le texte d'un ancien CV
+python3 $CV/scripts/extract_cv.py ~/chemin/ancien-cv.pdf
 ```
 
 `build_cv.py` refuse structurellement de produire du non-ATS : une seule colonne,
 zéro tableau, zéro zone de texte, styles nommés standards. La photo est ancrée en
-flottant (le seul élément décoratif toléré) et se retire avec `--no-photo`. Une
+flottant (le seul élément décoratif toléré) et se retire avec `--no-photo`. Sans
+clé `photo:` ou sans fichier image, le CV sort simplement sans photo. Les
+commentaires HTML du markdown ne sont jamais rendus, et un fichier qui porte
+encore le marqueur `<!-- TEMPLATE` est refusé. Une
 lettre se rend avec `--letter --no-photo` : mêmes contraintes de structure, mais
 marges larges, paragraphes espacés et justifiés, parce qu'un CV cherche la
 densité là où une lettre a besoin d'air.
@@ -106,11 +131,11 @@ avant toute édition du master ou d'une variante.
 ## Quatre règles non négociables
 
 **Zéro invention.** Ne jamais ajouter au CV une techno, un chiffre ou une
-responsabilité que l'utilisateur n'a pas. Si l'offre exige SQL Server et qu'il n'a
-fait que PostgreSQL, SQL Server n'entre pas dans le CV : il va dans le fichier de
-gaps et se traite en lettre de motivation (« SQL avancé sur PostgreSQL, concepts
-transposables »). La raison est pragmatique autant qu'éthique : un mot-clé bluffé
-passe l'ATS puis explose en entretien technique, ce qui coûte plus cher que de ne
+responsabilité que l'utilisateur n'a pas. Si l'offre exige SAP et qu'il n'a utilisé
+que Sage, SAP n'entre pas dans le CV : il va dans le fichier de gaps et se traite
+en lettre de motivation (« comptabilité fournisseurs sur Sage, logique d'ERP
+transposable »). La raison est pragmatique autant qu'éthique : un mot-clé bluffé
+passe l'ATS puis explose en entretien, ce qui coûte plus cher que de ne
 pas avoir été retenu. Le levier légitime, c'est de **réordonner le récit**, faire
 remonter la compétence que l'offre réclame avant celle qui plaît à l'utilisateur.
 
@@ -129,9 +154,10 @@ si elle existe, avec la preuve qu'un emploi à temps plein a déjà coexisté av
 elle. Un trou se déclare avec ce qui l'a rempli. Ce que l'utilisateur veut mettre
 en avant ou désamorcer est noté dans `profil.md`.
 
-Corollaire pour un profil entrepreneur : privilégier les métriques d'ingénierie
-(débit, disponibilité, volumétrie) aux métriques business (clients, revenus). Les
-premières prouvent la compétence, les secondes nourrissent la peur du départ.
+Corollaire pour un profil entrepreneur : privilégier les métriques de métier
+(volumes traités, délais, fiabilité) aux métriques business (clients, chiffre
+d'affaires). Les premières prouvent la compétence, les secondes nourrissent la
+peur du départ.
 
 **Ponctuation : ni tiret cadratin, ni point-virgule.** Les caractères `—`
 (U+2014) et `;` ne doivent apparaître dans aucun document produit, ni dans les
@@ -159,8 +185,8 @@ vérification en Python, où le problème ne se pose pas. Attention aux .odt et
 aucune information portée par une image. Abréviations explicitées au plus une
 fois, dans COMPÉTENCES TECHNIQUES, et uniquement quand le développement est
 lui-même un terme qu'un recruteur taperait dans une barre de recherche :
-« GED (Gestion Électronique de Documents) » oui, « ELO (classement par niveau) »
-non. L'ATS lit tout le fichier, l'endroit lui est indifférent. Le recruteur
+« GMAO (Gestion de Maintenance Assistée par Ordinateur) » oui, « RAF (reste à
+faire) » non. L'ATS lit tout le fichier, l'endroit lui est indifférent. Le recruteur
 humain lit les puces d'expérience et bute sur chaque parenthèse. Jamais de glose
 dans une lettre de motivation, qui n'est pas parsée. Tableau de décision dans
 `references/anti-ia.md`. Titres de section standards et en majuscules. PDF à texte extractible,
@@ -180,12 +206,12 @@ Ne réécris jamais `cv-master.md` en réponse à une offre. Copie-le vers
 
 ## Réflexes utiles
 
-Quand l'utilisateur demande un changement de fond (« ajoute Redis », « j'ai fini
-une mission »), il vise le **master**. Répercute ensuite dans les variantes actives
+Quand l'utilisateur demande un changement de fond (« ajoute mon CACES », « j'ai
+fini une mission »), il vise le **master**. Répercute ensuite dans les variantes actives
 si elles sont encore en jeu.
 
 Quand il demande « pourquoi tu as écrit X ? », il teste sa capacité à défendre la
-ligne en entretien. Réponds par l'explication technique complète et donne-lui la
+ligne en entretien. Réponds par l'explication complète et donne-lui la
 formulation de trois phrases qu'il peut resservir au recruteur.
 
 Quand un chiffre est ajouté au CV, vérifie qu'il correspond à sa réalité avant de
@@ -195,3 +221,13 @@ Quand un document existant doit être retouché (un .odt, un .docx reçu), édit
 XML interne plutôt que de le régénérer, et ne fais jamais de remplacement global
 sur le fichier entier : les codes couleur `#RRGGBB` des styles vivent dans le même
 fichier que le texte et une substitution aveugle les casse silencieusement.
+
+## Skills voisins
+
+Le skill **jobsearch** trouve et classe les offres en se fondant sur
+`cv-master.md` : un master rempli est donc le préalable à toute veille. Quand
+l'utilisateur choisit une offre, l'adaptation du CV et la lettre se font ici.
+L'envoi effectif de la candidature relève du skill **candidature**. Les
+fichiers à joindre sont ceux de `~/Documents/cv/<societe>/build/`. Avant l'envoi,
+copie-les sous leur nom définitif dans `build/envoi/` (`CV_Prenom_Nom.pdf`,
+`Lettre_Prenom_Nom.pdf`) : le recruteur voit ce nom, pas `cv.pdf`.

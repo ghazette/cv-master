@@ -30,14 +30,14 @@ Banque de questions qui produisent de la matière exploitable, par ordre de
 rendement décroissant :
 
 1. Sur ce projet, qu'est-ce qui a cassé, et comment tu l'as réglé ?
-2. Quelle décision technique tu as prise que quelqu'un d'autre aurait prise
-   autrement ?
+2. Quelle décision tu as prise que quelqu'un d'autre aurait prise autrement ?
 3. Combien de temps ça prenait avant, combien après ?
 4. Qu'est-ce qui te paraissait facile et qui ne l'était pas ?
-5. Quelle contrainte matérielle ou métier a dicté l'architecture ?
+5. Quelle contrainte matérielle ou métier a dicté ta façon de faire ?
 
 La question 1 est la plus rentable. La question 5 est celle qui produit les
-métriques d'ingénierie que la posture cofondateur privilégie.
+métriques de métier (volumes, délais, fiabilité) que la règle « Traiter les
+objections de face » privilégie.
 
 ---
 
@@ -45,7 +45,7 @@ métriques d'ingénierie que la posture cofondateur privilégie.
 
 Le SKILL.md impose d'expliciter les abréviations pour l'ATS. La glose d'acronyme
 est par ailleurs le marqueur IA le plus fiable qui existe, parce qu'un candidat
-n'explique jamais à un recruteur de son domaine ce qu'est un ELO.
+n'explique jamais à un recruteur de son domaine ce qu'est un reste à faire.
 
 Les deux règles sont toutes les deux justes. Elles portent sur des lecteurs
 différents. La résolution tient en trois points.
@@ -56,11 +56,11 @@ taperait-il ce développement dans une barre de recherche ?
 
 | Acronyme | Développement | Terme de recherche ? | Verdict |
 |---|---|---|---|
-| GED | Gestion Électronique de Documents | oui, massivement | gloser |
-| BIM | Building Information Modeling | oui | gloser |
+| GMAO | Gestion de Maintenance Assistée par Ordinateur | oui, massivement | gloser |
+| SIRH | Système d'Information Ressources Humaines | oui | gloser |
 | RGPD | Règlement Général sur la Protection des Données | l'acronyme suffit | ne pas gloser |
-| ELO | classement par niveau | non, personne | ne pas gloser |
-| CFD | mécanique des fluides numérique | marginal | ne pas gloser |
+| HACCP | analyse des dangers en restauration | l'acronyme suffit | ne pas gloser |
+| RAF | reste à faire | non, jargon interne | écrire en clair, sans sigle |
 | revues de code | code review | oui, l'anglais est cherché | gloser une fois |
 
 **Deux, la glose a lieu une seule fois dans le document, et de préférence dans
@@ -72,16 +72,17 @@ et laisse la prose respirer.
 **Trois, jamais de glose dans une lettre de motivation.** Une lettre n'est pas
 parsée par un ATS. La glose y est du bruit pur.
 
-Application au CV actuel :
+Exemples d'application :
 
-- `viewer 3D BIM (Building Information Modeling)` devient `viewer BIM`, et
-  `BIM (Building Information Modeling)` apparaît dans la ligne 3D de COMPÉTENCES.
-- `classement ELO (classement par niveau)` devient `classement ELO`. Le
-  développement répète le mot classement, ce qui est lisible à l'oeil nu comme
-  une sortie de modèle.
-- `CFD (mécanique des fluides numérique : StarCCM+, OpenFOAM)` devient
-  `simulations CFD sous StarCCM+ et OpenFOAM`. Les deux noms de logiciels sont
-  les vrais mots-clés, la traduction ne sert à rien.
+- `suivi des interventions dans la GMAO (Gestion de Maintenance Assistée par
+  Ordinateur)` devient `suivi des interventions dans la GMAO`, et le
+  développement apparaît une fois dans la ligne Logiciels de COMPÉTENCES.
+- `respect du RAF (reste à faire) de chaque lot` devient `suivi hebdomadaire du
+  reste à faire de chaque lot`. Un sigle interne se traduit en clair, il ne se
+  glose pas.
+- `HACCP (analyse des dangers : traçabilité, températures)` devient `plan HACCP,
+  relevés de températures deux fois par jour`. Le sigle est le vrai mot-clé, la
+  traduction ne sert à rien, le fait concret si.
 
 ---
 
@@ -157,28 +158,28 @@ par un substantif (Conception, Architecture, Intégration, Mise en place,
 Développement). Imposer au moins un tiers de puces commençant autrement : verbe
 conjugué, complément, ou attaque directe sur le problème.
 
-- Porté le viewer de Unity WebGL vers Three.js pour supprimer la dépendance au
-  plugin.
-- Le pipeline vidéo saturait la VRAM, d'où un découpage en tuiles VAE.
+- Repris seul le planning des 14 techniciens après le départ du responsable.
+- Les ruptures revenaient chaque lundi, d'où un inventaire tournant par allée.
 
 **L'adjectif d'inflation non quantifié.** Bannir scalable, haute performance,
 faible latence, avancé, complet, robuste, optimisé, entièrement, pleinement dès
 qu'aucun chiffre ne suit. Test : la phrase survit-elle à la question combien ?
 
-- `infrastructure WebSocket temps réel à faible latence` devient
-  `WebSocket, environ 40 ms de bout en bout sur un match à 10 joueurs`
+- `service client réactif et optimisé` devient `réponse aux réclamations sous
+  48 h, contre 5 jours à mon arrivée`
+- `API à faible latence` devient `API, environ 80 ms au 95e centile`
 
 **Le zéro-chiffre.** Un CV technique sans une seule métrique est aussi suspect
 qu'un CV bourré de +40 %. Viser 3 à 6 nombres, non ronds ou contre-intuitifs.
-Conformément à la posture cofondateur, prendre des métriques d'ingénierie
-(débit, latence, volumétrie, disponibilité) et non des métriques business.
+Prendre des métriques de métier (volume, délai, taux d'erreur, disponibilité)
+plutôt que des gains flatteurs et invérifiables (« +40 % de chiffre d'affaires »).
 
 **La redondance de la liste de compétences.** Aucune techno dans deux rubriques.
 Pas de compétence devenue triviale (interfaces responsive, HTML5). Pas de terme
 fourre-tout ajouté en fin de liste après avoir déjà nommé les outils concrets
-(`agents IA pour le développement` après Claude Code et Cursor).
+(`outils bureautiques` après Excel, Word et Outlook).
 
-**La parenthèse de rembourrage.** `PHP (Composer, autoloading PSR-4)`. Détailler
+**La parenthèse de rembourrage.** `Excel (formules, filtres, mise en forme)`. Détailler
 les sous-évidences d'une compétence de base signale qu'on l'étire. À distinguer
 de la glose ATS, qui est légitime dans les conditions vues plus haut.
 
@@ -206,10 +207,10 @@ recruteur relit son propre texte et n'apprend rien. Remplacer par une phrase qui
 prouve la lecture par une inférence, pas par une reprise.
 
 - Ne pas écrire : Votre annonce décrit précisément l'environnement dans lequel je
-  travaille le mieux, un produit métier complexe, une architecture maison, des
-  données critiques, une équipe resserrée.
-- Écrire plutôt : Une archi maison sans framework, ça veut dire que la doc c'est
-  le code. C'est le contexte que je préfère.
+  travaille le mieux, une PME industrielle, des délais courts, des clients
+  exigeants, une équipe resserrée.
+- Écrire plutôt : Six personnes pour trois sites, ça veut dire que tout le monde
+  décroche le téléphone. C'est le rythme que je préfère.
 
 **Le mapping paragraphe par exigence.** Un modèle traite les critères de
 l'annonce dans l'ordre, un paragraphe chacun, longueurs égales. Trop propre.
@@ -218,8 +219,8 @@ court, et au moins une exigence traitée en une phrase ou pas du tout.
 
 **La réfutation anticipée.** Le modèle devine l'objection et la nie.
 
-- Ne pas écrire : L'autonomie de la conception à la mise en production n'est pas
-  une formule sur mon CV, j'ai porté (...)
+- Ne pas écrire : L'autonomie n'est pas une formule sur mon CV, j'ai géré seul
+  (...)
 - Nier le soupçon l'installe. Supprimer la dénégation, garder la preuve.
 
 **Le hedge confiant sur une compétence absente.** C'est le point où la lettre
@@ -230,8 +231,8 @@ défini dans `cover-letter.md`.
 - Le conditionnel plus la litote signalent « je ne l'ai jamais fait » tout en
   prétendant le contraire, ce qui coûte plus cher que l'aveu.
 - Choisir un des deux régimes : l'aveu net (`je n'ai jamais écrit de T-SQL`), ou
-  la preuve de transfert (`sur la dernière migration MySQL vers PostgreSQL, j'ai
-  réécrit environ 40 requêtes à la main`). Jamais l'entre-deux.
+  la preuve de transfert (`lors du passage de MySQL à PostgreSQL, j'ai réécrit
+  une trentaine de requêtes à la main`). Jamais l'entre-deux.
 
 **Le recopiage du CV.** Une formulation identique dans les deux documents est une
 ligne perdue, le recruteur lit deux fois la même chose. La lettre doit dire ce
@@ -245,13 +246,14 @@ Ce qui rend un texte humain n'est pas l'absence de tics, c'est la présence de
 ceci. Au moins quatre par candidature, tous issus de faits réels du master.
 
 1. **Le détail invérifiable mais crédible.** Un nom de SDK, une version, une
-   contrainte matérielle, une durée bizarre. `maintenance limitée à quelques
-   heures par mois` vaut mieux que trois lignes d'adjectifs.
-2. **La limite assumée.** `missions confidentielles`, `Chinois : débutant`. Un
+   contrainte matérielle, une durée bizarre. `tournée de 74 km, 23 clients,
+   porteur de 12 t` vaut mieux que trois lignes d'adjectifs.
+2. **La limite assumée.** `chiffres internes non communicables`, `Allemand :
+   notions, lu mais peu parlé`. Un
    modèle ne s'auto-limite pas spontanément, c'est pour ça que ça sonne vrai.
 3. **La cause, pas le résultat.** Dire pourquoi la décision technique a été
-   prise, pas qu'elle était bonne. `On est passé en blue-green parce qu'une
-   migration Alembic coupait le chat en pleine conversation.`
+   prise, pas qu'elle était bonne. `On a avancé la réception à 6 h parce que
+   les camions arrivaient avant l'équipe.`
 4. **La variation de longueur.** Après deux phrases longues, une de six mots.
 5. **L'attaque concrète.** Une phrase qui commence par Concrètement, En pratique,
    Le problème était que, suivie d'un fait et jamais d'une généralité.
@@ -259,11 +261,11 @@ ceci. Au moins quatre par candidature, tous issus de faits réels du master.
 
 Trois exemples du niveau de texture visé :
 
-- `je suis à l'aise sans framework`, affirmation qui prend un risque
+- `je suis à l'aise sans procédure écrite`, affirmation qui prend un risque
 - l'enchaînement activité annexe autonome vers disponibilité pour un temps plein,
   qui répond à une objection que le recruteur n'a pas posée
-- `Conversion de maquettes issues d'un SDK CAO propriétaire vers un format
-  optimisé pour le web`, trop spécifique pour avoir été inventé
+- `Ressaisie des 1 200 fiches patients après la panne du serveur de mars`,
+  trop spécifique pour avoir été inventé
 
 Le point commun : chacun sort d'un fait du master, aucun ne pourrait être écrit
 par un modèle qui ne connaît pas le dossier.
@@ -293,8 +295,9 @@ Exécuter, corriger, ne pas afficher la passe sauf demande explicite de relectur
 8. **Test des longueurs.** Si tous les paragraphes tiennent à 20 % les uns des
    autres, en couper un de moitié.
 
-La ligne École 42 du master est le cas test de référence de ce fichier. Dans sa
-version actuelle elle est du soft skill pur, interchangeable avec n'importe quel
-candidat 42, et elle échoue aux tests 1 et 2. Version qui passe :
-`C, C++, systèmes Unix, pas de cours magistraux.` Ou rien, 42 se passe de
-commentaire.
+Cas test de référence : une ligne de formation du type `Formation exigeante qui
+m'a appris l'autonomie et le travail en équipe`. C'est du soft skill pur,
+interchangeable avec n'importe quel autre diplômé de la même école, et elle
+échoue aux tests 1 et 2. Version qui passe : le contenu concret (`Comptabilité
+analytique, droit social, stage de 10 semaines en cabinet`). Ou rien, un diplôme
+reconnu se passe de commentaire.

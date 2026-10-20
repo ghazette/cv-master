@@ -32,6 +32,22 @@ venv/
 .mypy_cache/
 .ruff_cache/
 
+# Données de recherche d'emploi : jamais dans le dépôt
+*.db
+*.sqlite
+.env
+.env.*
+config.json
+profile.json
+profil-candidature.json
+candidatures/
+offres/
+review/
+navigateur/
+.playwright-mcp/
+rapport.html
+candidatures.html
+
 # Éditeurs et OS
 .DS_Store
 Thumbs.db

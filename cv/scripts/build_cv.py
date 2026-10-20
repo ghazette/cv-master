@@ -17,13 +17,17 @@ import subprocess
 import sys
 from pathlib import Path
 
-from docx import Document
+try:
+    from docx import Document
+except ImportError:
+    sys.exit("python-docx manquant : pip install python-docx lxml")
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK, WD_TAB_ALIGNMENT
 from docx.oxml import OxmlElement, parse_xml
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
 
 WORKSPACE = Path.home() / "Documents" / "cv"
+TEMPLATE_MARK = "<!-- TEMPLATE"
 
 FONT = "Calibri"
 BODY_PT = 10
@@ -35,9 +39,16 @@ PHOTO_WIDTH_CM = 2.6
 # lecture
 # --------------------------------------------------------------------------
 
+def is_template(path: Path) -> bool:
+    """Le modèle vide porte « <!-- TEMPLATE » en première ligne, voir assets/."""
+    return path.read_text(encoding="utf-8").lstrip().startswith(TEMPLATE_MARK)
+
+
 def parse_source(path: Path):
     """Sépare le front matter (clé: valeur) du corps markdown."""
-    text = path.read_text(encoding="utf-8")
+    text = path.read_text(encoding="utf-8").lstrip()
+    if text.startswith(TEMPLATE_MARK):
+        text = text.split("\n", 1)[1] if "\n" in text else ""
     meta, body = {}, text
     if text.startswith("---"):
         end = text.find("\n---", 3)
@@ -235,6 +246,7 @@ def render_skill_line(doc: Document, label: str, rest: str):
 
 def render_body(doc: Document, body: str, letter=False):
     buffer: list[str] = []
+    in_comment = False
 
     def flush():
         if buffer:
@@ -247,11 +259,18 @@ def render_body(doc: Document, body: str, letter=False):
         line = raw.rstrip()
         stripped = line.strip()
 
+        # les commentaires HTML sont des consignes d'édition, jamais du contenu
+        if in_comment:
+            in_comment = "-->" not in stripped
+            continue
         if not stripped:
             flush()
         elif stripped == "<!-- pagebreak -->":
             flush()
             doc.add_paragraph().add_run().add_break(WD_BREAK.PAGE)
+        elif stripped.startswith("<!--"):
+            flush()
+            in_comment = "-->" not in stripped
         elif stripped.startswith("## "):
             flush()
             render_section(doc, stripped[3:])
@@ -295,15 +314,18 @@ def to_pdf(docx_path: Path) -> Path | None:
     return pdf if pdf.is_file() else None
 
 
-def verify_extraction(pdf: Path, expected_name: str) -> bool:
+def verify_extraction(pdf: Path, expected_name: str, letter=False) -> bool:
     """Un PDF dont le texte ne ressort pas est invisible pour un ATS."""
     if not shutil.which("pdftotext"):
+        print("  ! pdftotext absent (poppler-utils), extraction non vérifiée", file=sys.stderr)
         return True
     text = subprocess.run(
         ["pdftotext", "-layout", str(pdf), "-"],
         capture_output=True, text=True,
     ).stdout
-    ok = len(text) > 1200 and expected_name.split()[0].lower() in text.lower()
+    words = expected_name.split()
+    name_ok = not words or words[0].lower() in text.lower()
+    ok = len(text) > (400 if letter else 1200) and name_ok
     print(f"  extraction : {len(text)} caractères, {'OK' if ok else 'ÉCHEC'}")
     return ok
 
@@ -321,7 +343,13 @@ def main():
     if not args.source.is_file():
         sys.exit(f"introuvable : {args.source}")
 
+    if is_template(args.source):
+        sys.exit(f"{args.source} est encore le modèle vide (première ligne « <!-- TEMPLATE »). "
+                 "Le remplir d'abord avec l'utilisateur : references/onboarding.md")
+
     meta, body = parse_source(args.source)
+    if not meta.get("name"):
+        print("  ! clé « name » absente du front matter", file=sys.stderr)
     photo = None
     if meta.get("photo") and not args.no_photo:
         photo = resolve_photo(meta["photo"], args.source.parent)
@@ -343,7 +371,7 @@ def main():
         pdf = to_pdf(docx_path)
         if pdf:
             print(f"  pdf  : {pdf}")
-            if not verify_extraction(pdf, meta.get("name", "")):
+            if not verify_extraction(pdf, meta.get("name", ""), letter=args.letter):
                 sys.exit("PDF non extractible, inutilisable pour un ATS")
 
 

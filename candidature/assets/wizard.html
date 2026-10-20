@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mandat de candidature</title>
+<style>
+:root {
+  --bg: #f6f5f1; --panel: #ffffff; --ink: #1d1f22; --muted: #5d636b; --line: #dcd9d2;
+  --accent: #23527c; --accent-ink: #ffffff; --soft: #eaf0f6;
+  --ok: #2f6b3a; --ok-bg: #e5f1e6; --warn: #8a5a00; --warn-bg: #fbf0d9; --bad: #9b2c2c; --bad-bg: #f8e3e1;
+  --focus: #2b6cb0;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --panel: #1e2125; --ink: #e8e6e1; --muted: #a1a7ae; --line: #33373d;
+    --accent: #7fb0e0; --accent-ink: #10161d; --soft: #1f2a36;
+    --ok: #8fd19a; --ok-bg: #1d3022; --warn: #f0c46a; --warn-bg: #3a2f17; --bad: #f2a29a; --bad-bg: #3d1f1d;
+    --focus: #8ec2f5;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --panel: #1e2125; --ink: #e8e6e1; --muted: #a1a7ae; --line: #33373d;
+  --accent: #7fb0e0; --accent-ink: #10161d; --soft: #1f2a36;
+  --ok: #8fd19a; --ok-bg: #1d3022; --warn: #f0c46a; --warn-bg: #3a2f17; --bad: #f2a29a; --bad-bg: #3d1f1d;
+  --focus: #8ec2f5;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif; }
+a { color: var(--accent); }
+code { font: 0.9em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--soft); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+.layout { max-width: 1080px; margin: 0 auto; padding: 24px 16px 64px; display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 32px; }
+header.top { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+header.top h1 { margin: 0; font-size: 1.45rem; }
+header.top .meta { color: var(--muted); font-size: .9rem; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; font: inherit; }
+nav.rail ol { list-style: none; margin: 0; padding: 0; position: sticky; top: 16px; }
+nav.rail button { width: 100%; display: grid; grid-template-columns: 26px 1fr auto; gap: 8px; align-items: center; text-align: left; background: none; border: 0; border-radius: 6px; padding: 8px; color: var(--ink); font: inherit; cursor: pointer; }
+nav.rail button:hover { background: var(--soft); }
+nav.rail button[aria-current] { background: var(--soft); font-weight: 600; }
+nav.rail .n { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-size: .8rem; }
+nav.rail .st { font-size: .78rem; color: var(--muted); }
+nav.rail .st.done { color: var(--ok); }
+main { min-width: 0; }
+section.cadre { display: none; }
+section.cadre.on { display: block; }
+section h2 { margin: 0 0 6px; font-size: 1.3rem; }
+section h3 { margin: 28px 0 8px; font-size: 1.05rem; }
+.lead { color: var(--muted); margin: 0 0 20px; max-width: 70ch; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 18px; margin: 0 0 16px; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; }
+label.f { display: block; }
+label.f > span, .q { display: block; font-weight: 600; font-size: .93rem; margin-bottom: 4px; }
+label.f em, .q em { font-weight: 400; font-style: normal; color: var(--muted); }
+.hint, label.f > span.hint { display: block; color: var(--muted); font-size: .85rem; font-weight: 400; margin: 3px 0 0; }
+input[type=text], input[type=email], input[type=tel], input[type=url], input[type=number], input[type=date], textarea, select {
+  width: 100%; padding: 9px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); font: inherit;
+}
+textarea { min-height: 76px; resize: vertical; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.choice { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 2px; }
+.choice label, .checks label { display: inline-flex; gap: 7px; align-items: flex-start; cursor: pointer; }
+.choice input, .checks input { margin-top: 5px; }
+.checks { display: grid; gap: 8px; }
+.checks label.locked { cursor: default; color: var(--muted); }
+.req::after { content: " *"; color: var(--bad); }
+.tag { display: inline-block; font-size: .76rem; padding: 1px 8px; border-radius: 10px; margin: 4px 6px 0 0; }
+.tag.g { background: var(--ok-bg); color: var(--ok); }
+.tag.a { background: var(--warn-bg); color: var(--warn); }
+.tag.r { background: var(--bad-bg); color: var(--bad); }
+.note { background: var(--soft); border-radius: 6px; padding: 12px 14px; margin: 0 0 16px; max-width: 75ch; }
+.note.warn { background: var(--warn-bg); }
+.plat { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 16px; border-top: 1px solid var(--line); padding: 14px 0; }
+.plat:first-child { border-top: 0; padding-top: 0; }
+.plat h4 { margin: 0; font-size: 1rem; }
+.plat p { margin: 4px 0 0; color: var(--muted); font-size: .88rem; }
+.plat .what { display: grid; gap: 10px; }
+.skill { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 12px; border-top: 1px solid var(--line); padding: 12px 0; }
+.skill:first-child { border-top: 0; }
+.skill .body { display: grid; gap: 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; }
+.chip { border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 14px; padding: 3px 11px; font: inherit; font-size: .85rem; cursor: pointer; }
+.chip:hover { background: var(--soft); }
+.btn { border-radius: 6px; padding: 10px 16px; font: inherit; font-weight: 600; cursor: pointer; border: 1px solid var(--accent); }
+.btn.pri { background: var(--accent); color: var(--accent-ink); }
+.btn.sec { background: var(--panel); color: var(--accent); }
+.btn.small { padding: 5px 10px; font-weight: 500; font-size: .88rem; }
+.btn:disabled { opacity: .45; cursor: default; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+.nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 26px; }
+.missing { background: var(--warn-bg); color: var(--ink); border-radius: 6px; padding: 12px 14px; }
+.missing ul { margin: 6px 0 0; padding-left: 20px; }
+.ready { background: var(--ok-bg); border-radius: 6px; padding: 12px 14px; }
+pre.cmd { background: var(--soft); border-radius: 6px; padding: 10px 12px; overflow-x: auto; font: .85rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; margin: 6px 0 0; }
+ol.steps { margin: 0; padding-left: 22px; }
+ol.steps li { margin-bottom: 6px; }
+@media (max-width: 760px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  nav.rail ol { position: static; display: flex; overflow-x: auto; gap: 4px; padding-bottom: 4px; }
+  nav.rail li { flex: 0 0 auto; }
+  nav.rail button { grid-template-columns: 24px auto; }
+  nav.rail .lbl, nav.rail .st { display: none; }
+  nav.rail button[aria-current] .lbl { display: inline; }
+  .grid2, .plat { grid-template-columns: minmax(0, 1fr); }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<header class="top">
+  <h1>Mandat de candidature</h1>
+  <div class="meta">
+    <span id="savestate">Rien n'est envoyé sur Internet. Les réponses restent dans ce navigateur.</span>
+    <span>Rempli à <b id="pct">0 %</b></span>
+    <label class="linkbtn" for="load" style="cursor:pointer">Reprendre un profil existant</label>
+    <input type="file" id="load" accept="application/json,.json" hidden>
+    <button type="button" class="linkbtn" id="reset">Tout effacer</button>
+  </div>
+</header>
+
+<nav class="rail" aria-label="Étapes"><ol id="rail"></ol></nav>
+
+<main>
+<form id="form" autocomplete="off" onsubmit="return false">
+
+<section class="cadre" data-title="Avant de commencer">
+  <h2>Avant de commencer</h2>
+  <p class="lead">Ce formulaire fixe ce que Claude peut faire quand il postule pour toi : quelles réponses il donne aux formulaires, sur quelles plateformes il peut envoyer seul, et quand il doit s'arrêter pour te demander.</p>
+  <div class="card">
+    <ol class="steps">
+      <li>Tu remplis les étapes. Les champs marqués <span class="req"></span> sont nécessaires. Tu peux télécharger avec des trous : Claude te posera les questions manquantes avant de postuler.</li>
+      <li>À la dernière étape, tu télécharges <code>profil-candidature.json</code>.</li>
+      <li>Dans Claude Code, tu dis <q>profil de candidature rempli</q>. Claude le range dans <code>~/Documents/jobsearch/candidature/</code> et le rend lisible par toi seul (<code>chmod 600</code>).</li>
+    </ol>
+  </div>
+  <div class="note warn">
+    <b>Aucun mot de passe ici, ni nulle part dans le chat.</b> Tu te connectes toi-même à tes comptes dans le navigateur dédié. Si un site exige de créer un compte, Claude s'arrête et c'est toi qui choisis le mot de passe dans la fenêtre.
+  </div>
+  <div class="note">
+    <b>Zéro invention.</b> Chaque réponse que Claude donne à un formulaire vient de ton CV master, de ce profil ou de toi. Une question sans réponse ici le fait s'arrêter, il ne devine pas.
+  </div>
+</section>
+
+<section class="cadre" data-title="Coordonnées">
+  <h2>Coordonnées de candidature</h2>
+  <p class="lead">Ce que Claude met dans les champs d'identité. Ce sont les seules coordonnées qu'il utilisera.</p>
+  <div class="card grid2">
+    <label class="f"><span class="req">Prénom</span><input type="text" name="identite.prenom" data-req data-label="Prénom"></label>
+    <label class="f"><span class="req">Nom</span><input type="text" name="identite.nom" data-req data-label="Nom"></label>
+    <label class="f"><span class="req">E-mail de candidature</span><input type="email" name="identite.email" data-req data-label="E-mail de candidature">
+      <span class="hint">Une adresse dédiée aux candidatures est conseillée : les réponses des recruteurs ne se perdent pas, et tu peux la couper plus tard.</span></label>
+    <label class="f"><span class="req">Téléphone</span><input type="tel" name="identite.telephone" data-req data-label="Téléphone"></label>
+    <label class="f"><span class="req">Ville</span><input type="text" name="identite.ville" data-req data-label="Ville">
+      <span class="hint">Telle qu'elle doit apparaître dans les formulaires.</span></label>
+    <label class="f"><span>Code postal <em>(facultatif)</em></span><input type="text" name="identite.code_postal" inputmode="numeric"></label>
+    <label class="f"><span>Profil LinkedIn <em>(URL, facultatif)</em></span><input type="url" name="identite.linkedin"></label>
+    <label class="f"><span>GitHub ou portfolio <em>(URL, facultatif)</em></span><input type="url" name="identite.github"></label>
+    <label class="f"><span>Site personnel <em>(URL, facultatif)</em></span><input type="url" name="identite.site"></label>
+    <label class="f"><span>À écrire dans « Poste actuel »</span><input type="text" name="identite.poste_actuel">
+      <span class="hint">L'intitulé que tu veux voir dans ce champ, qui n'est pas forcément ton titre officiel. Vide : Claude reprend le dernier poste du CV master.</span></label>
+    <label class="f"><span>À écrire dans « Entreprise actuelle »</span><input type="text" name="identite.entreprise_actuelle">
+      <span class="hint">Vide : Claude reprend le CV master, ou laisse le champ vide s'il est facultatif.</span></label>
+  </div>
+</section>
+
+<section class="cadre" data-title="Situation et prétentions">
+  <h2>Situation et prétentions</h2>
+  <p class="lead">Les questions fermées qui reviennent dans presque tous les formulaires.</p>
+  <div class="card">
+    <div class="q req">Contrats que tu acceptes</div>
+    <div class="checks" data-req data-label="Contrats acceptés" data-name="situation.contrats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+      <label><input type="checkbox" name="situation.contrats" value="cdi"> CDI</label>
+      <label><input type="checkbox" name="situation.contrats" value="cdd"> CDD</label>
+      <label><input type="checkbox" name="situation.contrats" value="freelance"> Freelance</label>
+      <label><input type="checkbox" name="situation.contrats" value="portage"> Portage salarial</label>
+    </div>
+  </div>
+  <div class="card grid2">
+    <div>
+      <div class="q req">Disponibilité</div>
+      <div class="choice" data-req data-label="Disponibilité" data-name="situation.disponibilite">
+        <label><input type="radio" name="situation.disponibilite" value="immediate"> Immédiate</label>
+        <label><input type="radio" name="situation.disponibilite" value="preavis"> Après un préavis</label>
+        <label><input type="radio" name="situation.disponibilite" value="date"> À partir d'une date</label>
+      </div>
+    </div>
+    <label class="f"><span>Durée du préavis <em>(si préavis)</em></span><input type="text" name="situation.preavis" placeholder="ex. 3 mois, négociable"></label>
+    <label class="f"><span>Disponible à partir du <em>(si date)</em></span><input type="date" name="situation.date_dispo"></label>
+    <div>
+      <div class="q req">Autorisation de travail en France</div>
+      <div class="choice" data-req data-label="Autorisation de travail" data-name="situation.droit_travail">
+        <label><input type="radio" name="situation.droit_travail" value="nationalite_fr"> Nationalité française</label>
+        <label><input type="radio" name="situation.droit_travail" value="ue"> Ressortissant UE / EEE / Suisse</label>
+        <label><input type="radio" name="situation.droit_travail" value="titre_sejour"> Titre de séjour qui autorise le travail</label>
+        <label><input type="radio" name="situation.droit_travail" value="sponsoring"> J'ai besoin d'un sponsoring</label>
+      </div>
+    </div>
+    <div>
+      <div class="q">Permis de conduire</div>
+      <div class="choice">
+        <label><input type="radio" name="situation.permis" value="oui_vehicule"> Oui, avec véhicule</label>
+        <label><input type="radio" name="situation.permis" value="oui_sans_vehicule"> Oui, sans véhicule</label>
+        <label><input type="radio" name="situation.permis" value="non"> Non</label>
+      </div>
+    </div>
+    <label class="f"><span>Années d'expérience dans le métier visé</span><input type="number" name="parcours.annees_experience" min="0" max="60" step="1">
+      <span class="hint">Le chiffre que tu assumes en entretien. Claude ne le recalcule pas.</span></label>
+    <label class="f"><span>Plus haut diplôme</span><input type="text" name="parcours.diplome" placeholder="ex. Bac+5, école d'ingénieurs"></label>
+    <div>
+      <div class="q">Niveau d'anglais</div>
+      <div class="choice">
+        <label><input type="radio" name="parcours.anglais" value="notions"> Notions</label>
+        <label><input type="radio" name="parcours.anglais" value="technique"> Lu et écrit (technique)</label>
+        <label><input type="radio" name="parcours.anglais" value="professionnel"> Professionnel</label>
+        <label><input type="radio" name="parcours.anglais" value="courant"> Courant</label>
+        <label><input type="radio" name="parcours.anglais" value="bilingue"> Bilingue</label>
+      </div>
+    </div>
+    <label class="f" style="grid-column:1/-1"><span>Présentation en une phrase <em>(facultatif)</em></span><input type="text" name="situation.accroche">
+      <span class="hint">Pour les champs courts du type « Présentez-vous ». Écris-la toi-même : Claude ne la reformule pas.</span></label>
+  </div>
+
+  <h3>Rémunération</h3>
+  <div class="card grid2">
+    <label class="f"><span>Salaire CDI visé <em>(k€ brut annuel)</em></span><input type="number" name="remuneration.cdi_cible" min="0" step="1"></label>
+    <label class="f"><span>Salaire CDI minimum <em>(k€ brut annuel)</em></span><input type="number" name="remuneration.cdi_min" min="0" step="1">
+      <span class="hint">Sous ce montant, Claude s'arrête et te demande.</span></label>
+    <label class="f"><span>TJM visé <em>(€ HT par jour, freelance ou portage)</em></span><input type="number" name="remuneration.tjm_cible" min="0" step="10"></label>
+    <label class="f"><span>TJM minimum <em>(€ HT par jour)</em></span><input type="number" name="remuneration.tjm_min" min="0" step="10"></label>
+    <div style="grid-column:1/-1">
+      <div class="q req">Quand un formulaire demande tes prétentions</div>
+      <div class="choice" data-req data-label="Réponse sur les prétentions" data-name="remuneration.reponse">
+        <label><input type="radio" name="remuneration.reponse" value="cible"> Donner le montant visé</label>
+        <label><input type="radio" name="remuneration.reponse" value="fourchette"> Donner la fourchette minimum à visé</label>
+        <label><input type="radio" name="remuneration.reponse" value="discuter"> « À discuter » si le champ l'accepte, sinon le montant visé</label>
+      </div>
+    </div>
+    <div style="grid-column:1/-1">
+      <div class="q">Structure pour le freelance <em>(si freelance ou portage)</em></div>
+      <div class="choice">
+        <label><input type="radio" name="remuneration.structure" value="micro"> Micro-entreprise</label>
+        <label><input type="radio" name="remuneration.structure" value="societe"> Société (SASU, EURL…)</label>
+        <label><input type="radio" name="remuneration.structure" value="portage"> Portage salarial</label>
+        <label><input type="radio" name="remuneration.structure" value="a_creer"> Aucune, à créer si mission</label>
+      </div>
+    </div>
+    <label class="f"><span>SIRET <em>(facultatif, si un formulaire freelance le demande)</em></span><input type="text" name="remuneration.siret" inputmode="numeric"></label>
+  </div>
+</section>
+
+<section class="cadre" data-title="Mobilité et réponses types">
+  <h2>Mobilité et réponses types</h2>
+  <p class="lead">Où tu acceptes de travailler, et les petites questions facultatives des formulaires.</p>
+  <div class="card grid2">
+    <div style="grid-column:1/-1">
+      <div class="q req">Rythme de travail accepté</div>
+      <div class="choice" data-req data-label="Rythme de travail" data-name="mobilite.rythme">
+        <label><input type="radio" name="mobilite.rythme" value="full_remote"> Full remote uniquement</label>
+        <label><input type="radio" name="mobilite.rythme" value="hybride"> Hybride accepté</label>
+        <label><input type="radio" name="mobilite.rythme" value="sur_site"> Sur site accepté</label>
+      </div>
+    </div>
+    <label class="f"><span>Jours sur site par semaine, au maximum</span><input type="number" name="mobilite.jours_site_max" min="0" max="5" step="1"></label>
+    <label class="f"><span>Zone où tu peux te rendre sur site</span><input type="text" name="mobilite.zone" placeholder="ex. 45 min de transport depuis chez moi">
+      <span class="hint">En toutes lettres, Claude la compare au lieu de l'offre.</span></label>
+    <div>
+      <div class="q">Déplacements professionnels</div>
+      <div class="choice">
+        <label><input type="radio" name="mobilite.deplacements" value="non"> Non</label>
+        <label><input type="radio" name="mobilite.deplacements" value="occasionnels"> Occasionnels</label>
+        <label><input type="radio" name="mobilite.deplacements" value="frequents"> Fréquents acceptés</label>
+      </div>
+    </div>
+    <div>
+      <div class="q">Déménagement</div>
+      <div class="choice">
+        <label><input type="radio" name="mobilite.demenagement" value="non"> Non</label>
+        <label><input type="radio" name="mobilite.demenagement" value="a_discuter"> À discuter</label>
+        <label><input type="radio" name="mobilite.demenagement" value="oui"> Oui</label>
+      </div>
+    </div>
+  </div>
+
+  <h3>Questions facultatives</h3>
+  <div class="card grid2">
+    <div>
+      <div class="q">Genre</div>
+      <div class="choice">
+        <label><input type="radio" name="reponses_types.genre" value="ne_pas_repondre"> Je préfère ne pas répondre</label>
+        <label><input type="radio" name="reponses_types.genre" value="homme"> Homme</label>
+        <label><input type="radio" name="reponses_types.genre" value="femme"> Femme</label>
+        <label><input type="radio" name="reponses_types.genre" value="autre"> Autre</label>
+      </div>
+    </div>
+    <div>
+      <div class="q">RQTH ou situation de handicap</div>
+      <div class="choice">
+        <label><input type="radio" name="reponses_types.handicap" value="ne_pas_repondre"> Je préfère ne pas répondre</label>
+        <label><input type="radio" name="reponses_types.handicap" value="oui"> Oui</label>
+        <label><input type="radio" name="reponses_types.handicap" value="non"> Non</label>
+      </div>
+      <span class="hint">Information facultative et protégée. Sans réponse, Claude choisit « ne pas répondre » quand c'est proposé, sinon il s'arrête.</span>
+    </div>
+    <div>
+      <div class="q">« Comment avez-vous connu cette offre ? »</div>
+      <div class="choice">
+        <label><input type="radio" name="reponses_types.source" value="plateforme"> Le site où l'offre a été trouvée</label>
+        <label><input type="radio" name="reponses_types.source" value="site_entreprise"> Le site de l'entreprise</label>
+        <label><input type="radio" name="reponses_types.source" value="texte"> Toujours la même réponse :</label>
+      </div>
+      <input type="text" name="reponses_types.source_texte" style="margin-top:6px" aria-label="Réponse fixe à « Comment avez-vous connu cette offre ? »">
+    </div>
+    <div>
+      <div class="q">Garder ton profil pour d'autres postes (vivier)</div>
+      <div class="choice">
+        <label><input type="radio" name="reponses_types.vivier" value="oui"> Oui</label>
+        <label><input type="radio" name="reponses_types.vivier" value="non"> Non</label>
+      </div>
+    </div>
+    <div>
+      <div class="q">Newsletters et offres partenaires</div>
+      <div class="choice">
+        <label><input type="radio" name="reponses_types.newsletters" value="non"> Toujours décocher</label>
+        <label><input type="radio" name="reponses_types.newsletters" value="oui"> Accepter</label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cadre" data-title="Compétences">
+  <h2>Compétences à trancher</h2>
+  <p class="lead">Les formulaires posent souvent des questions du type « Avez-vous de l'expérience avec Kubernetes ? ». Ajoute ici les technologies ou méthodes qui reviennent dans tes offres et réponds pour chacune. Claude ne coche « oui » que si tu as répondu « Oui » ici ou si le CV master le prouve.</p>
+  <div class="note">
+    <b>Oui</b> : tu l'as pratiquée et tu peux en parler en entretien.
+    <b>Non</b> : Claude ne la revendique jamais.
+    <b>En cours</b> : tu apprends, Claude le dit tel quel, avec ta précision.
+  </div>
+  <div class="card">
+    <div id="skills"></div>
+    <div class="actions" style="margin:12px 0 0">
+      <input type="text" id="skillName" placeholder="Nom d'une technologie ou méthode" aria-label="Nom d'une compétence à ajouter" style="max-width:320px">
+      <button type="button" class="btn sec small" id="skillAdd">Ajouter</button>
+    </div>
+    <div class="hint">Suggestions fréquentes, un clic ajoute la ligne :</div>
+    <div class="chips" id="chips"></div>
+  </div>
+</section>
+
+<section class="cadre" data-title="Plateformes">
+  <h2>Droits par plateforme</h2>
+  <p class="lead">Pour chaque plateforme, dis si tu as un compte et ce que Claude a le droit d'y faire. Le navigateur piloté utilise tes sessions : tu t'y connectes toi-même une fois.</p>
+  <div class="note">
+    <b>Remplir et envoyer</b> : Claude remplit et clique sur le bouton final, dans les limites de l'étape suivante.
+    <b>Claude prépare</b> : il remplit tout et s'arrête avant le bouton final, tu cliques toi-même.
+    <b>Jamais</b> : il n'ouvre pas la plateforme, il te donne une fiche à copier-coller.
+  </div>
+  <div class="card" id="platforms"></div>
+  <h3>Exclusions</h3>
+  <div class="card grid2">
+    <label class="f"><span>Autres plateformes interdites <em>(une par ligne)</em></span><textarea name="exclusions.plateformes"></textarea></label>
+    <label class="f"><span>Entreprises à ne jamais contacter <em>(une par ligne)</em></span><textarea name="exclusions.entreprises"></textarea>
+      <span class="hint">Ton employeur actuel, une société où tu ne veux pas retourner, etc.</span></label>
+  </div>
+</section>
+
+<section class="cadre" data-title="Règles d'envoi">
+  <h2>Règles d'envoi</h2>
+  <p class="lead">Jusqu'où Claude peut aller seul. Tu peux changer ces règles à tout moment en le lui disant, puis en mettant ce fichier à jour.</p>
+  <div class="card">
+    <div class="q req">Mode d'envoi</div>
+    <div class="choice" data-req data-label="Mode d'envoi" data-name="regles.mode" style="display:grid">
+      <label><input type="radio" name="regles.mode" value="valider"> Je valide chaque envoi : Claude remplit, me montre le récapitulatif et clique quand je réponds « ok »</label>
+      <label><input type="radio" name="regles.mode" value="autonome"> Envoi autonome sur les plateformes « Remplir et envoyer », avec un bilan à la fin de la session</label>
+    </div>
+  </div>
+  <div class="card grid2">
+    <label class="f"><span>Candidatures par jour, au maximum</span><input type="number" name="regles.plafond_jour" min="1" max="50" step="1" placeholder="ex. 5"></label>
+    <label class="f"><span>Score minimum d'une offre</span><input type="number" name="regles.seuil_score" min="0" max="100" step="1" placeholder="ex. 70">
+      <span class="hint">Score relu du skill jobsearch, sur 100. Sous ce score, Claude ne prépare pas l'envoi sans ton accord.</span></label>
+    <label class="f"><span>Revérifier qu'une annonce est en ligne si elle a plus de <em>(jours)</em></span><input type="number" name="regles.verifier_annonce_jours" min="0" step="1" placeholder="ex. 15"></label>
+    <div>
+      <div class="q req">ESN et cabinets de recrutement</div>
+      <div class="choice" data-req data-label="ESN et cabinets" data-name="regles.esn">
+        <label><input type="radio" name="regles.esn" value="oui"> Accepter</label>
+        <label><input type="radio" name="regles.esn" value="client_nomme"> Seulement si le client final est nommé</label>
+        <label><input type="radio" name="regles.esn" value="non"> Jamais</label>
+      </div>
+    </div>
+    <label class="f"><span class="req">Signature des lettres</span><input type="text" name="lettres.signature" data-req data-label="Signature des lettres" placeholder="Prénom Nom">
+      <span class="hint">Exactement ce qui figure sous la lettre.</span></label>
+  </div>
+  <h3>Claude s'arrête et te demande quand</h3>
+  <div class="card">
+    <div class="checks" id="stops"></div>
+  </div>
+</section>
+
+<section class="cadre" data-title="Mandat et export">
+  <h2>Mandat et export</h2>
+  <div class="card">
+    <p style="margin-top:0;max-width:72ch">Je mandate Claude pour préparer et, sur les plateformes où je l'ai autorisé, envoyer des candidatures en mon nom. Il utilise uniquement les comptes auxquels je me suis connecté moi-même, les coordonnées de ce profil et les faits de mon CV master ou de ce profil. Il respecte les règles d'arrêt ci-dessus. Je peux retirer ou modifier ce mandat à tout moment en le lui disant.</p>
+    <div class="checks" data-req data-label="Accord du mandat" data-name="mandat.accord">
+      <label><input type="checkbox" name="mandat.accord" value="oui"> <b>J'accepte ce mandat.</b></label>
+    </div>
+    <div class="grid2" style="margin-top:14px">
+      <label class="f"><span class="req">Nom complet, en guise de signature</span><input type="text" name="mandat.signature" data-req data-label="Signature du mandat"></label>
+      <label class="f"><span class="req">Date</span><input type="date" name="mandat.date" id="mdate" data-req data-label="Date du mandat"></label>
+    </div>
+  </div>
+  <div id="check"></div>
+  <div class="actions">
+    <button type="button" class="btn pri" id="dl">Télécharger profil-candidature.json</button>
+    <button type="button" class="btn sec" id="cp">Copier le JSON</button>
+  </div>
+  <div class="card" id="after" hidden>
+    <b>Fichier prêt.</b> Dans Claude Code, dis <q>profil de candidature rempli</q>. Ou range-le toi-même :
+    <pre class="cmd">mkdir -p ~/Documents/jobsearch/candidature
+mv ~/Téléchargements/profil-candidature.json ~/Documents/jobsearch/candidature/
+chmod 600 ~/Documents/jobsearch/candidature/profil-candidature.json</pre>
+    <span class="hint">Le dossier de téléchargement peut s'appeler <code>~/Downloads</code> selon ton système.</span>
+  </div>
+</section>
+
+</form>
+<div class="nav">
+  <button type="button" class="btn sec" id="prev">Étape précédente</button>
+  <button type="button" class="btn pri" id="next">Étape suivante</button>
+</div>
+</main>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var KEY = "candidature-mandat-v1";
+
+  var PLATFORMS = [
+    { id: "linkedin", name: "LinkedIn", account: true, tags: [["r", "Automatisation interdite par les CGU"]],
+      note: "Candidature simplifiée sur le site, ou redirection vers le site de l'entreprise. « Claude prépare » est conseillé." },
+    { id: "wttj", name: "Welcome to the Jungle", account: true, tags: [["g", "Formulaire simple"]],
+      note: "Compte par e-mail. Redirige souvent vers le site carrière de l'entreprise." },
+    { id: "freework", name: "Free-Work", account: true, tags: [["g", "Formulaire simple"]],
+      note: "Compte candidat avec profil. Beaucoup de missions freelance et d'ESN." },
+    { id: "indeed", name: "Indeed", account: true, tags: [["r", "Automatisation interdite par les CGU"], ["a", "Captchas fréquents"]],
+      note: "Souvent une redirection vers le site de l'entreprise." },
+    { id: "hellowork", name: "HelloWork", account: true, tags: [["a", "Compte souvent demandé"]],
+      note: "Jobboard généraliste, formulaire court." },
+    { id: "apec", name: "APEC", account: true, tags: [["r", "Anti-robot"]],
+      note: "Un navigateur piloté y est souvent bloqué. « Jamais » est conseillé." },
+    { id: "francetravail", name: "France Travail", account: true, tags: [["a", "Connexion FranceConnect possible"]],
+      note: "Espace candidat. Tu passes toi-même par FranceConnect si tu l'utilises." },
+    { id: "freelance", name: "Plateformes freelance (Malt et autres)", account: true, tags: [["a", "Profil à compléter, SIRET parfois demandé"]],
+      note: "Demandent souvent TJM, disponibilité et structure." },
+    { id: "ats", name: "Sites carrières des entreprises", account: false, tags: [["g", "Pas de compte en général"], ["a", "Captcha possible"]],
+      note: "Lever, Greenhouse, Ashby, SmartRecruiters, Teamtailor, Recruitee, Workday. Workday et quelques autres exigent un compte par entreprise." },
+    { id: "email", name: "Candidature par e-mail", account: true, tags: [["a", "Webmail ouvert dans le navigateur dédié"]],
+      note: "Claude rédige le mail avec le CV et la lettre en pièces jointes, depuis l'adresse de candidature. « Compte » = ton webmail est connecté dans le navigateur dédié." }
+  ];
+
+  var STOPS = [
+    { id: "test_technique", label: "Le site impose un test technique, un exercice ou un questionnaire chronométré.", locked: true },
+    { id: "question_sans_reponse", label: "Une question n'a de réponse ni dans ce profil ni dans le CV master.", locked: true },
+    { id: "creation_compte", label: "Le site exige de créer un compte (tu choisis le mot de passe dans la fenêtre).", locked: true },
+    { id: "captcha", label: "Un captcha ou un anti-robot apparaît.", locked: true },
+    { id: "paiement", label: "Une demande de paiement ou de coordonnées bancaires.", locked: true },
+    { id: "rendez_vous", label: "Une prise de rendez-vous ou un créneau d'entretien à choisir.", locked: true },
+    { id: "message_recruteur", label: "Un message d'un recruteur arrive (Claude rédige un brouillon, tu l'envoies).", locked: true },
+    { id: "signature_contrat", label: "Une signature de contrat, de proposition ou de document engageant.", locked: true },
+    { id: "salaire_sous_minimum", label: "Le salaire ou le TJM affiché est sous ton minimum.", locked: false },
+    { id: "texte_libre", label: "Le formulaire demande un texte libre que la lettre du dossier ne couvre pas.", locked: false }
+  ];
+
+  var SUGGESTIONS = ["AWS", "Azure", "Google Cloud", "Kubernetes", "Docker", "Terraform", "CI/CD", "Kafka",
+    "Spark", "React", "Angular", "Vue", "TypeScript", "Java", "Go", "Python", "SQL", "NoSQL",
+    "LangChain", "Bases vectorielles", "Fine-tuning de LLM", "Serveur MCP", "Méthodes agiles", "Management d'équipe"];
+
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function slug(s) {
+    return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/\+/g, "plus").replace(/#/g, "sharp").replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "") || "competence";
+  }
+  function radios(name, opts, req, label) {
+    return '<div class="choice"' + (req ? ' data-req data-label="' + esc(label) + '" data-name="' + esc(name) + '"' : "") + ">" +
+      opts.map(function (o) { return '<label><input type="radio" name="' + esc(name) + '" value="' + o[0] + '"> ' + esc(o[1]) + "</label>"; }).join("") + "</div>";
+  }
+
+  // Plateformes
+  $("platforms").innerHTML = PLATFORMS.map(function (p) {
+    return '<div class="plat"><div><h4>' + esc(p.name) + "</h4><p>" + esc(p.note) + "</p>" +
+      p.tags.map(function (t) { return '<span class="tag ' + t[0] + '">' + esc(t[1]) + "</span>"; }).join("") + "</div>" +
+      '<div class="what">' +
+      (p.account ? '<div><div class="q">Compte</div>' + radios("plateformes." + p.id + ".compte",
+        [["oui", "J'ai un compte"], ["a_creer", "À créer"], ["non", "Pas de compte"]], false) + "</div>" : "") +
+      '<div><div class="q req">Ce que Claude peut y faire</div>' + radios("plateformes." + p.id + ".droit",
+        [["auto", "Remplir et envoyer"], ["preparer", "Claude prépare, tu cliques"], ["jamais", "Jamais"]], true, p.name + " : droit") + "</div>" +
+      "</div></div>";
+  }).join("");
+
+  // Règles d'arrêt
+  $("stops").innerHTML = STOPS.map(function (s) {
+    return '<label' + (s.locked ? ' class="locked" title="Règle obligatoire"' : "") + '><input type="checkbox" name="regles.arret.' + s.id + '" value="oui" checked' +
+      (s.locked ? " disabled" : "") + "> <span>" + esc(s.label) + (s.locked ? ' <span class="tag r">Toujours</span>' : "") + "</span></label>";
+  }).join("") + '<span class="hint">Les règles marquées « Toujours » ne se décochent pas. Les deux autres sont cochées par défaut : décoche seulement si tu veux laisser Claude décider seul.</span>';
+
+  // Compétences
+  var skillsBox = $("skills");
+  function skillRow(name, value, precision) {
+    var key = slug(name);
+    if (skillsBox.querySelector('[data-key="' + key + '"]')) return null;
+    var div = document.createElement("div");
+    div.className = "skill"; div.dataset.key = key;
+    div.innerHTML = '<div class="body"><input type="text" class="sk-name" aria-label="Nom de la compétence" value="' + esc(name) + '">' +
+      '<div><div class="q req">As-tu cette compétence ?</div><div class="choice" data-req data-label="Compétence : ' + esc(name) + '" data-name="sk:' + key + '">' +
+      [["oui", "Oui"], ["non", "Non"], ["en_cours", "En cours d'apprentissage"]].map(function (o) {
+        return '<label><input type="radio" class="sk-val" name="sk:' + key + '" value="' + o[0] + '"' + (value === o[0] ? " checked" : "") + "> " + o[1] + "</label>";
+      }).join("") + "</div></div>" +
+      '<input type="text" class="sk-prec" aria-label="Précision" placeholder="Précision facultative (ex. projet perso, 6 mois en production, certification en cours)" value="' + esc(precision || "") + '"></div>' +
+      '<div><button type="button" class="btn sec small sk-del">Retirer</button></div>';
+    skillsBox.appendChild(div);
+    return div;
+  }
+  function addSkill(name) {
+    name = String(name || "").trim();
+    if (!name) return;
+    var row = skillRow(name, null, "");
+    if (row) row.querySelector(".sk-val").focus();
+    changed(); save();
+  }
+  $("chips").innerHTML = SUGGESTIONS.map(function (s) { return '<button type="button" class="chip">' + esc(s) + "</button>"; }).join("");
+  $("chips").addEventListener("click", function (e) { var b = e.target.closest(".chip"); if (b) addSkill(b.textContent); });
+  $("skillAdd").addEventListener("click", function () { addSkill($("skillName").value); $("skillName").value = ""; });
+  $("skillName").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); $("skillAdd").click(); } });
+  skillsBox.addEventListener("click", function (e) {
+    var b = e.target.closest(".sk-del"); if (!b) return;
+    b.closest(".skill").remove(); changed(); save();
+  });
+  function collectSkills() {
+    var out = {};
+    skillsBox.querySelectorAll(".skill").forEach(function (row) {
+      var name = row.querySelector(".sk-name").value.trim();
+      if (!name) return;
+      var checked = row.querySelector(".sk-val:checked");
+      out[slug(name)] = { nom: name, a_la_competence: checked ? checked.value : null, precision: row.querySelector(".sk-prec").value.trim() };
+    });
+    return out;
+  }
+
+  // Navigation
+  var sections = Array.prototype.slice.call(document.querySelectorAll("section.cadre"));
+  var rail = $("rail");
+  rail.innerHTML = sections.map(function (s, i) {
+    return '<li><button type="button" data-i="' + i + '"><span class="n">' + (i + 1) + '</span><span class="lbl">' + esc(s.dataset.title) + '</span><span class="st" id="st' + i + '"></span></button></li>';
+  }).join("");
+  var current = 0;
+  function store(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
+  function show(i) {
+    current = Math.max(0, Math.min(sections.length - 1, i));
+    sections.forEach(function (s, j) { s.classList.toggle("on", j === current); });
+    rail.querySelectorAll("button").forEach(function (b, j) { if (j === current) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current"); });
+    $("prev").disabled = current === 0;
+    $("next").hidden = current === sections.length - 1;
+    store(KEY + ":step", String(current));
+    if (current === sections.length - 1) renderCheck();
+  }
+  rail.addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) { show(+b.dataset.i); window.scrollTo(0, 0); } });
+  $("prev").addEventListener("click", function () { show(current - 1); window.scrollTo(0, 0); });
+  $("next").addEventListener("click", function () { show(current + 1); window.scrollTo(0, 0); });
+
+  // Lecture des champs
+  var form = $("form");
+  function fields() {
+    return Array.prototype.slice.call(form.querySelectorAll("input[name], select[name], textarea[name]"))
+      .filter(function (el) { return el.name.indexOf("sk:") !== 0; });
+  }
+  function collect() {
+    var flat = {};
+    fields().forEach(function (el) {
+      var n = el.name;
+      if (el.type === "radio") { if (el.checked) flat[n] = el.value; else if (!(n in flat)) flat[n] = null; }
+      else if (el.type === "checkbox") {
+        var group = form.querySelectorAll('input[type=checkbox][name="' + n + '"]');
+        if (group.length > 1) { flat[n] = flat[n] || []; if (el.checked) flat[n].push(el.value); }
+        else flat[n] = el.checked;
+      }
+      else if (el.type === "number") flat[n] = el.value === "" ? null : Number(el.value);
+      else flat[n] = el.value.trim();
+    });
+    return flat;
+  }
+  function apply(flat) {
+    fields().forEach(function (el) {
+      if (!(el.name in flat)) return;
+      var v = flat[el.name];
+      if (el.type === "radio") el.checked = v === el.value;
+      else if (el.type === "checkbox") { if (!el.disabled) el.checked = Array.isArray(v) ? v.indexOf(el.value) >= 0 : !!v; }
+      else el.value = v == null ? "" : (Array.isArray(v) ? v.join("\n") : v);
+    });
+  }
+  function nest(flat) {
+    var out = {};
+    Object.keys(flat).forEach(function (k) {
+      var parts = k.split("."), o = out;
+      for (var i = 0; i < parts.length - 1; i++) { o[parts[i]] = o[parts[i]] || {}; o = o[parts[i]]; }
+      o[parts[parts.length - 1]] = flat[k];
+    });
+    return out;
+  }
+  function flatten(obj, prefix, out) {
+    out = out || {};
+    Object.keys(obj || {}).forEach(function (k) {
+      var v = obj[k], key = prefix ? prefix + "." + k : k;
+      if (v && typeof v === "object" && !Array.isArray(v)) flatten(v, key, out); else out[key] = v;
+    });
+    return out;
+  }
+  function lines(s) { return String(s || "").split(/\r?\n/).map(function (x) { return x.trim(); }).filter(Boolean); }
+
+  // Progression
+  function isFilled(el, flat) {
+    var name = el.dataset.name;
+    if (name && name.indexOf("sk:") === 0) return !!el.querySelector("input:checked");
+    if (name) { var v = flat[name]; return Array.isArray(v) ? v.length > 0 : !!v; }
+    return el.value.trim() !== "";
+  }
+  function conditional(flat) {
+    var miss = [], c = flat["situation.contrats"] || [];
+    if (c.indexOf("cdi") >= 0 || c.indexOf("cdd") >= 0) {
+      if (flat["remuneration.cdi_min"] == null) miss.push([2, "Salaire minimum (CDI ou CDD accepté)"]);
+    }
+    if (c.indexOf("freelance") >= 0 || c.indexOf("portage") >= 0) {
+      if (flat["remuneration.tjm_min"] == null) miss.push([2, "TJM minimum (freelance ou portage accepté)"]);
+      if (!flat["remuneration.structure"]) miss.push([2, "Structure pour le freelance"]);
+    }
+    if (flat["situation.disponibilite"] === "preavis" && !flat["situation.preavis"]) miss.push([2, "Durée du préavis"]);
+    if (flat["situation.disponibilite"] === "date" && !flat["situation.date_dispo"]) miss.push([2, "Date de disponibilité"]);
+    if (flat["reponses_types.source"] === "texte" && !flat["reponses_types.source_texte"]) miss.push([3, "Réponse fixe à « Comment avez-vous connu cette offre ? »"]);
+    return miss;
+  }
+  function progress() {
+    var flat = collect(), total = 0, done = 0, missing = [];
+    sections.forEach(function (s, i) {
+      var reqs = s.querySelectorAll("[data-req]"), d = 0;
+      reqs.forEach(function (el) { if (isFilled(el, flat)) d++; else missing.push([i, el.dataset.label]); });
+      total += reqs.length; done += d;
+      var st = $("st" + i);
+      st.textContent = reqs.length ? d + "/" + reqs.length : "";
+      st.classList.toggle("done", reqs.length > 0 && d === reqs.length);
+    });
+    missing = missing.concat(conditional(flat));
+    $("pct").textContent = (total ? Math.round(done / total * 100) : 0) + " %";
+    return { flat: flat, missing: missing };
+  }
+  function renderCheck() {
+    var p = progress(), box = $("check");
+    if (p.missing.length) {
+      var byStep = {};
+      p.missing.forEach(function (m) { (byStep[m[0]] = byStep[m[0]] || []).push(m[1]); });
+      box.innerHTML = '<div class="missing"><b>' + p.missing.length + (p.missing.length > 1 ? " réponses manquent." : " réponse manque.") +
+        "</b> Tu peux télécharger quand même : Claude te posera ces questions avant de postuler." +
+        "<ul>" + Object.keys(byStep).map(function (i) { return "<li>Étape " + (+i + 1) + " : " + byStep[i].map(esc).join(", ") + "</li>"; }).join("") + "</ul></div>";
+    } else {
+      box.innerHTML = '<div class="ready"><b>Tout est rempli.</b> Le fichier contient ce qu\'il faut pour commencer.</div>';
+    }
+    return p;
+  }
+
+  // Sauvegarde locale
+  var saveTimer;
+  function save() {
+    var ok = store(KEY, JSON.stringify({ champs: collect(), competences: collectSkills() }));
+    $("savestate").textContent = ok
+      ? "Enregistré dans ce navigateur à " + new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })
+      : "Ce navigateur bloque l'enregistrement : télécharge le fichier avant de fermer la page.";
+  }
+  function changed() {
+    progress(); clearTimeout(saveTimer); saveTimer = setTimeout(save, 300);
+    if (current === sections.length - 1) renderCheck();
+  }
+  form.addEventListener("input", changed);
+  form.addEventListener("change", function () { changed(); clearTimeout(saveTimer); save(); });
+  window.addEventListener("pagehide", save);
+  $("reset").addEventListener("click", function () {
+    if (!confirm("Effacer toutes les réponses enregistrées dans ce navigateur ?")) return;
+    try { localStorage.removeItem(KEY); localStorage.removeItem(KEY + ":step"); } catch (e) {}
+    location.reload();
+  });
+  function restore(champs, competences) {
+    apply(champs || {});
+    skillsBox.innerHTML = "";
+    Object.keys(competences || {}).forEach(function (k) {
+      var c = competences[k] || {};
+      skillRow(c.nom || k, c.a_la_competence, c.precision);
+    });
+  }
+
+  // Export
+  function payload() {
+    var p = renderCheck(), flat = p.flat;
+    var data = nest(flat);
+    data.exclusions = data.exclusions || {};
+    data.exclusions.plateformes = lines(flat["exclusions.plateformes"]);
+    data.exclusions.entreprises = lines(flat["exclusions.entreprises"]);
+    data.mandat = data.mandat || {};
+    data.mandat.accord = flat["mandat.accord"] === true;
+    var arret = (data.regles && data.regles.arret) || {};
+    STOPS.forEach(function (s) { if (s.locked) arret[s.id] = true; });
+    data.competences = collectSkills();
+    var ordered = {
+      meta: {
+        schema: "profil-candidature",
+        version: 1,
+        genere_le: new Date().toISOString(),
+        manquants: p.missing.map(function (m) { return "étape " + (m[0] + 1) + " : " + m[1]; })
+      },
+      identite: data.identite, situation: data.situation, parcours: data.parcours, remuneration: data.remuneration,
+      mobilite: data.mobilite, reponses_types: data.reponses_types, competences: data.competences,
+      plateformes: data.plateformes, exclusions: data.exclusions, lettres: data.lettres, regles: data.regles, mandat: data.mandat
+    };
+    return JSON.stringify(ordered, null, 2);
+  }
+  $("dl").addEventListener("click", function () {
+    var blob = new Blob([payload()], { type: "application/json" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "profil-candidature.json";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+    $("after").hidden = false;
+  });
+  $("cp").addEventListener("click", function (e) {
+    var btn = e.currentTarget, text = payload();
+    (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () {
+      btn.textContent = "JSON copié";
+    }, function () { btn.textContent = "Copie impossible, utilise le téléchargement"; });
+    setTimeout(function () { btn.textContent = "Copier le JSON"; }, 2500);
+  });
+
+  // Reprise d'un profil existant
+  $("load").addEventListener("change", function (e) {
+    var file = e.target.files && e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var data = JSON.parse(reader.result);
+        if (!data.meta || data.meta.schema !== "profil-candidature") throw new Error("schema");
+        var comp = data.competences || {};
+        var rest = {};
+        Object.keys(data).forEach(function (k) { if (k !== "competences" && k !== "meta") rest[k] = data[k]; });
+        var flat = flatten(rest);
+        if (data.mandat) flat["mandat.accord"] = data.mandat.accord === true;
+        restore(flat, comp);
+        changed(); save();
+        $("savestate").textContent = "Profil repris depuis " + file.name;
+      } catch (err) {
+        alert("Ce fichier n'est pas un profil-candidature.json valide.");
+      }
+      e.target.value = "";
+    };
+    reader.readAsText(file);
+  });
+
+  // Démarrage
+  try {
+    var saved = localStorage.getItem(KEY);
+    if (saved) { var s = JSON.parse(saved); restore(s.champs, s.competences); $("savestate").textContent = "Réponses précédentes restaurées."; }
+  } catch (e) {}
+  if (!$("mdate").value) $("mdate").value = new Date().toISOString().slice(0, 10);
+  var step = 0;
+  try { step = +(localStorage.getItem(KEY + ":step") || 0) || 0; } catch (e) {}
+  progress();
+  show(step);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "skill_name": "jobsearch",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "salut, quoi de neuf côté boulot ? montre moi les meilleures offres du moment, surtout si y'a du full remote",
+      "expected_output": "Vérifie d'abord que la config est prête (init.py --check ou absence de message « vierge »). Lance run.py (les sources récentes sont sautées grâce aux délais), relit la file de revue selon scoring.md après avoir lu le CV maître et config.json, importe la revue, affiche le top via jobs.py top, résume les 3-5 offres à regarder en premier avec une phrase chacune, signale les sources en erreur, donne le chemin du rapport et propose --serve.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "j'ai postulé ce matin chez Acme pour le poste de développeur backend, et vire toutes les offres de Exemple Talent c'est une plateforme freelance US qui m'intéresse pas",
+      "expected_output": "Retrouve l'uid Acme (jobs.py find) et le passe en statut postule ; retrouve toutes les offres Exemple Talent et les passe en ecarte ; confirme ce qui a été modifié ; le rapport est régénéré ; propose de compléter la fiche récap (references/recap.md) ou renvoie vers le skill candidature. Aucune collecte lancée.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "adapte mon CV à l'offre jobsearch wttj:00000000-0000-0000-0000-000000000000",
+      "expected_output": "Exporte l'offre via jobs.py offer, passe l'offre en favori, puis enchaîne sur le skill cv en mode offre avec le fichier exporté (mots-clés, manques, CV ciblé). N'invente aucune compétence.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "je viens d'installer le skill, trouve moi un job",
+      "expected_output": "Détecte le premier lancement (config.json absent ou vierge) et ne lance aucune collecte. Lance init.py, vérifie ~/Documents/cv/cv-master.md (sinon renvoie vers le skill cv en mode premier lancement), mène l'entretien court une question à la fois (domicile, zone pour le présentiel, jours sur site max, remote, contrats, métiers, salaire cible et minimum, ESN), remplit config.json, lance init.py --geocode, dérive profile.json du CV maître, liste les clés API optionnelles avec leur lien sans jamais demander leur valeur dans le chat, puis init.py --check et première collecte.",
+      "files": []
+    }
+  ]
+}

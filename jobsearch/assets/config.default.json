@@ -1,0 +1,65 @@
+{
+  "_doc": {
+    "_": "Modèle de ~/Documents/jobsearch/config.json, copié par scripts/init.py puis rempli pendant l'onboarding (references/onboarding.md). Les clés qui commencent par « _ » sont des commentaires, ignorées par les scripts. Après une modification : `run.py --rescore`. Pour voir ce qui manque : `init.py --check`.",
+    "home": "Domicile. city (et postcode si homonymes) suffisent : `init.py --geocode` complète lat, lon, department.",
+    "onsite": "Où le présentiel ou l'hybride est accepté. Une offre dont le bureau tombe dans la zone passe, quel que soit son rythme, tant qu'elle ne dépasse pas max_days_on_site jours sur site par semaine (5 = pas de limite ; 0 = aucun présentiel, seulement du full remote). La zone se décrit de quatre façons cumulables : zone (cercles), zone_departments, zone_postcodes (préfixes), zone_patterns (regex sur le libellé du lieu, en minuscules sans accents).",
+    "onsite.zone": "Cercles {\"name\": \"Nantes et agglo\", \"city\": \"Nantes\", \"radius_km\": 15}. lat/lon ajoutés par `init.py --geocode` (ou à la main). Exemple d'axe de train : un cercle par gare desservie.",
+    "onsite.zone_departments": "Départements entiers, ex. [\"44\", \"85\"].",
+    "onsite.zone_postcodes": "Préfixes de code postal, ex. [\"440\", \"44300\"].",
+    "onsite.zone_patterns": "Regex sur le libellé du lieu, ex. [\"\\\\bsaint-nazaire\\\\b\"]. Dernier recours : préférer les cercles.",
+    "remote": "Hors zone, seul le full remote passe, et seulement s'il est ouvert depuis un pays de countries (codes ISO2). scope_patterns : regex appliquées à la portée annoncée du remote (« France », « Europe », « Worldwide ») ; ajouter \"\\\\beurope\\\\b\" si une portée Europe sans mention du pays convient. accepted=false : aucun full remote hors zone.",
+    "search_areas": "Où chercher les offres sur site ou hybrides : [{\"name\": \"Nantes\", \"city\": \"Nantes\", \"radius_km\": 30}]. Un appel par lieu et par requête sur chaque plateforme : 1 à 3 lieux suffisent (rayon large, le filtre de zone tranche ensuite). `init.py --geocode` ajoute lat, lon, postcode, insee, department, region. Champs optionnels : serpapi_location, freework_location. Vide : déduit des cercles de onsite.zone.",
+    "queries": "Requêtes de recherche. fr : intitulés tels qu'écrits dans les annonces françaises (4 à 8, du plus important au moins important : certaines sources n'en prennent que 2 ou 3). en : variantes anglaises pour les plateformes internationales (vide = fr). freework : mots courts pour Free-Work (ET logique entre les mots), optionnel.",
+    "prefilter": "Tri des sources qui ramènent un flux entier (remote boards, pages carrières, HN). Regex en minuscules sans accents. title : le métier dans le titre ; title_exclude : faux positifs ; stack : spécialité dans titre ou tags ; stack_text : mots très discriminants dans la description. Vide = mots des requêtes.",
+    "contracts_allowed": "Parmi cdi, freelance, cdd, interim, stage, alternance ; garder unknown pour ne pas perdre les offres qui ne disent rien.",
+    "salary_target": "Bonus au pré-score si le salaire affiché atteint la cible (year en €/an brut, day en TJM €/j). min_year / min_day : malus si le salaire affiché est franchement en dessous. null = ignoré. Jamais un filtre.",
+    "esn_ok": "false : la revue écarte les postes en ESN / régie (mission chez un client).",
+    "scrape": "false : saute LinkedIn / Indeed (python-jobspy), qui font l'essentiel de la durée de collecte.",
+    "ats_companies": "Entreprises suivies sur leur page carrières : {\"lever\": [{\"slug\": \"x\", \"name\": \"X\"}], \"greenhouse\": [\"x\"], \"ashby\": [...], \"workable\": [...], \"recruitee\": [...], \"smartrecruiters\": [...]}. Méthode dans references/ats-companies.md.",
+    "options": "Clés facultatives : jobspy_sites ([\"linkedin\", \"indeed\"]), ats_max_age_days (90), jobicy_industry (\"dev\"), weworkremotely_feeds (URLs RSS), sources_disabled (noms de `run.py --list`)."
+  },
+  "home": {
+    "city": "",
+    "postcode": "",
+    "lat": null,
+    "lon": null
+  },
+  "onsite": {
+    "max_days_on_site": 5,
+    "zone": [],
+    "zone_departments": [],
+    "zone_postcodes": [],
+    "zone_patterns": []
+  },
+  "remote": {
+    "accepted": true,
+    "countries": ["FR"],
+    "scope_patterns": ["\\bfran(ce|cia)\\b", "\\bfrench\\b", "\\bfr\\b"]
+  },
+  "search_areas": [],
+  "queries": {
+    "fr": [],
+    "en": [],
+    "freework": []
+  },
+  "prefilter": {
+    "title": [],
+    "title_exclude": [],
+    "stack": [],
+    "stack_text": []
+  },
+  "contracts_allowed": ["cdi", "unknown"],
+  "salary_target": {
+    "year": null,
+    "day": null,
+    "min_year": null,
+    "min_day": null
+  },
+  "esn_ok": true,
+  "scrape": true,
+  "max_age_days": 30,
+  "per_query": 50,
+  "llm_review_top": 30,
+  "ats_companies": {},
+  "sources_disabled": []
+}

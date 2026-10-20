@@ -31,7 +31,7 @@ LEXIQUE = [
     r"riche de mon parcours",
     r"dot[ée] d'une solide",
     r"reconnue pour son",
-    r"en tant que d[ée]veloppeur passionn",
+    r"en tant que \w+ passionn",
     # auto-description
     r"passionn[ée] par l'innovation",
     r"force de proposition",
@@ -114,13 +114,24 @@ CHIFFRES_MAX = 8
 
 
 def lignes_utiles(texte):
-    """Renvoie (numero, contenu) en ignorant le YAML frontmatter et les blocs de code."""
-    out, dans_yaml, dans_code = [], False, False
+    """Renvoie (numero, contenu) en ignorant le YAML frontmatter, les blocs de code
+    et les commentaires HTML (consignes d'edition, jamais rendues)."""
+    out, dans_yaml, dans_code, dans_comm = [], False, False, False
+    debut = True
     for i, ligne in enumerate(texte.splitlines(), 1):
         s = ligne.strip()
-        if i == 1 and s == "---":
+        if dans_comm:
+            dans_comm = "-->" not in s
+            continue
+        if s.startswith("<!--"):
+            dans_comm = "-->" not in s
+            continue
+        if debut and s == "---":
+            debut = False
             dans_yaml = True
             continue
+        if s:
+            debut = False
         if dans_yaml:
             if s == "---":
                 dans_yaml = False

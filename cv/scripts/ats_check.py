@@ -104,7 +104,7 @@ def check_docx(path: Path, letter=False) -> list[str]:
         else:
             line("✓", label, "aucun")
 
-    line("·", "images", f"{len(images)} (1 attendue : la photo)")
+    line("·", "images", f"{len(images)} (0 ou 1 attendue : la photo)")
     if len(images) > 1:
         alerts.append(f"{len(images)} images : seule la photo de profil est tolérée, "
                       "toute autre image ne produit aucun texte extractible")

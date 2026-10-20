@@ -17,24 +17,24 @@ sur ce qui, dans le parcours, répond directement au cœur du poste.
 format CV interdit : le problème rencontré, la décision technique, le résultat.
 Choisis les faits qui matchent l'offre, pas les plus impressionnants dans l'absolu.
 
-**3. Le gap, traité de front.** Nomme la techno manquante avant que le recruteur
+**3. Le gap, traité de front.** Nomme la compétence manquante avant que le recruteur
 ne la remarque, et montre le pont : « Je n'ai pas pratiqué SQL Server, mon SQL
-avancé s'est construit sur PostgreSQL et MariaDB (requêtes complexes,
+avancé s'est construit sur PostgreSQL (requêtes complexes,
 optimisation, migrations de schéma). Les concepts sont transposables et la
 montée en compétence sur le dialecte T-SQL est une affaire de semaines. » Traiter le gap
 soi-même le désamorce. Le laisser découvrir le transforme en objection.
 
 **4. La disponibilité et la clôture.** C'est le paragraphe qui porte l'objection
 principale identifiée dans `profil.md` : activité annexe qui tourne en autonomie,
-trou d'emploi déjà rempli, reconversion assumée. Un exemple concret. Le CDD
-de 2026 le prouve factuellement. Puis une phrase de disponibilité et d'ouverture
-à l'échange.
+trou d'emploi déjà rempli, reconversion assumée. Un fait concret la désamorce
+(un emploi à temps plein déjà tenu en parallèle, une formation terminée et
+datée). Puis une phrase de disponibilité et d'ouverture à l'échange.
 
 ## Ton
 
 Direct, sans emphase, sans superlatif. Les formules de politesse françaises
 attendues, mais courtes. Pas de « passionné depuis toujours », pas de « votre
-entreprise leader sur son marché ». Un recruteur technique lit vingt lettres
+entreprise leader sur son marché ». Un recruteur lit vingt lettres
 identiques par semaine : la seule façon de sortir du lot est d'être concret.
 
 Elle se lit en moins d'une minute. Chaque phrase qui n'apporte pas un fait ou ne

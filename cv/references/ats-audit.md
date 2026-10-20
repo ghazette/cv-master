@@ -38,8 +38,9 @@ et génère le fichier `mots-cles.md`. Un CV structurellement parfait plafonne �
 elle ne coûte rien. Toute autre image est une alerte : logo d'entreprise, barre de
 niveau de compétence, icône remplaçant un intitulé, pictogramme portant une
 information. Les barres de progression sont le piège classique, elles ne
-produisent aucun texte extractible. Les abréviations non explicitées (GED, ELO,
-CFD, BIM) coûtent aussi des points : l'ATS cherche le terme complet, pas le sigle.
+produisent aucun texte extractible. Les abréviations non explicitées dont le
+développement est un terme recherché (GMAO, SIRH, ADV) coûtent aussi des points :
+l'ATS cherche le terme complet, pas le sigle.
 
 **6. Éléments illisibles.** Tableaux, zones de texte, colonnes, en-têtes et pieds
 de page contenant des informations. Un tableau se parse souvent cellule par
@@ -67,7 +68,7 @@ vient ensuite, car un tableau sans lecture est illisible.
 | Format | 5/5 | ✔ PDF texte natif, extraction vérifiée |
 | Structure | 5/5 | ✔ Sections standards, une colonne |
 | Mots-clés du poste | 2,5/5 | Présents : … / Manquants : … |
-| Images / abréviations | 4,5/5 | Photo tolérée, « GED » à expliciter |
+| Images / abréviations | 4,5/5 | Photo tolérée, « GMAO » à expliciter |
 | Éléments illisibles | 5/5 | ✔ Aucun tableau ni zone de texte |
 
 **Score : 24,5/30 → 16/20**
