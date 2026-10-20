@@ -137,6 +137,15 @@ portaient sur le coût et la fiabilité`. Les aveux de gaps (« jamais utilisé
 l'outil X ») restent : ce sont des faits. Si le skill n'est pas installé :
 `npx skills add hardikpandya/stop-slop -g -y`.
 
+Puis **une seule passe humaniseur-fr** (skill **humaniseur-fr**) sur le résultat :
+registre courant soutenu, celui d'une lettre pro. Elle varie le rythme (phrases
+courtes intercalées), retire le vocabulaire IA français (« permettre de »,
+« également », « crucial ») et les anglicismes. Deux garde-fous : la « personnalité »
+qu'il demande se limite au ton et au rythme, jamais un fait, un ressenti ou une
+anecdote absents du master ; et une seule passe, sa propre règle, sinon le texte
+s'aplatit de nouveau.
+Si le skill manque : `npx skills add samber/cc-skills@humaniseur-fr -g -y`.
+
 ## Les deux modes
 
 **Mode 1, CV seul.** L'utilisateur demande un audit, ou colle son CV sans offre.

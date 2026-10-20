@@ -44,20 +44,23 @@ for skill in cv jobsearch candidature; do
   echo "  skill $skill installé"
 done
 
-# Skill tiers : stop-slop, passe anti-tournures IA sur les CV et lettres.
-if [[ -e "$SKILLS_DIR/stop-slop" ]]; then
-  echo "  skill stop-slop déjà présent"
-elif command -v npx >/dev/null; then
-  # le code retour est non nul si un autre agent que Claude refuse l'install globale
-  npx -y skills add hardikpandya/stop-slop -g -y >/dev/null 2>&1 || true
-  if [[ -e "$HOME/.claude/skills/stop-slop" ]]; then
-    echo "  skill stop-slop installé"
+# Skills tiers de relecture des CV et lettres : stop-slop puis humaniseur-fr.
+for pair in "stop-slop:hardikpandya/stop-slop" "humaniseur-fr:samber/cc-skills@humaniseur-fr"; do
+  name="${pair%%:*}"; pkg="${pair#*:}"
+  if [[ -e "$SKILLS_DIR/$name" ]]; then
+    echo "  skill $name déjà présent"
+  elif command -v npx >/dev/null; then
+    # le code retour est non nul si un autre agent que Claude refuse l'install globale
+    npx -y skills add "$pkg" -g -y >/dev/null 2>&1 || true
+    if [[ -e "$HOME/.claude/skills/$name" ]]; then
+      echo "  skill $name installé"
+    else
+      echo "  $name : échec, lance « npx skills add $pkg -g -y »"
+    fi
   else
-    echo "  stop-slop : échec, lance « npx skills add hardikpandya/stop-slop -g -y »"
+    echo "  $name non installé (Node.js manquant) : npx skills add $pkg -g -y"
   fi
-else
-  echo "  stop-slop non installé (Node.js manquant) : npx skills add hardikpandya/stop-slop -g -y"
-fi
+done
 
 python3 -c "import docx" 2>/dev/null || {
   echo "  python-docx manquant, installation..."

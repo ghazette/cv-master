@@ -1,12 +1,12 @@
 # CV + recherche d'emploi pour Claude Code
 
-Trois skills qui s'enchaînent en partant de zéro (pas de CV, aucune info), plus un skill tiers de relecture :
+Trois skills qui s'enchaînent en partant de zéro (pas de CV, aucune info), plus deux skills tiers de relecture :
 
 | Skill | Ce qu'il fait |
 |---|---|
 | `cv` | Crée ton CV par entretien ou depuis un ancien CV, puis l'adapte à chaque offre (CV + lettre en PDF compatibles ATS, sans rien inventer). |
 | `jobsearch` | Collecte les offres sur les plateformes françaises, filtre selon ta zone et le télétravail, les classe par rapport à ton CV. |
-| `stop-slop` | Skill tiers ([hardikpandya/stop-slop](https://github.com/hardikpandya/stop-slop)) installé avec les autres : retire les tournures IA des CV et lettres (« X, pas Y »…). |
+| `stop-slop` + `humaniseur-fr` | Skills tiers ([hardikpandya/stop-slop](https://github.com/hardikpandya/stop-slop), [samber/cc-skills](https://github.com/samber/cc-skills)) installés avec les autres : retirent les tournures IA des CV et lettres en français (« X, pas Y », vocabulaire IA, rythme uniforme). |
 | `candidature` | Remplit les formulaires dans un Chrome dédié. Tu cliques toi-même sur Envoyer. Garde une fiche par candidature pour savoir qui t'appelle. |
 
 ## Installation
