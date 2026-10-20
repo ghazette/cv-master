@@ -1,86 +1,81 @@
 #!/usr/bin/env bash
-# Installe les trois skills (cv, jobsearch, candidature) pour Claude Code.
-#   ./install.sh            installation globale dans ~/.claude/skills/
-#   ./install.sh --project  installation locale dans ./.claude/skills/
-#   ./install.sh --force    remplace les skills déjà installés sans demander
-# Les données personnelles ne sont jamais touchées : ~/Documents/cv,
-# ~/Documents/jobsearch et ~/.config/jobsearch sont seulement créés s'ils manquent.
+# Installe les trois skills (cv, jobsearch, candidature) pour Claude Code, puis lance les inits.
+#   ./install.sh                     installation globale dans ~/.claude/skills/
+#   ./install.sh --project           installation locale dans ./.claude/skills/
+#   ./install.sh --force             remplace les skills déjà installés sans demander
+#   ./install.sh --cv ~/mon-cv.pdf   importe un CV existant pendant l'init
+# Les autres options sont transmises à cv/scripts/init.py
+# (--workspace, --cv, --photo, --name, --title, --contact, --signature, --yes).
+# Les données personnelles ne sont jamais écrasées.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILLS_DIR="$HOME/.claude/skills"
 FORCE=0
+INIT_ARGS=()
 for arg in "$@"; do
   case "$arg" in
     --project) SKILLS_DIR="$PWD/.claude/skills" ;;
     --force)   FORCE=1 ;;
-    *) echo "Option inconnue : $arg"; exit 1 ;;
+    *)         INIT_ARGS+=("$arg") ;;
   esac
 done
-CV_DIR="$HOME/Documents/cv"
 
-echo "Skills      : $SKILLS_DIR"
-echo "CV          : $CV_DIR"
-echo "Recherche   : $HOME/Documents/jobsearch"
+echo "Skills : $SKILLS_DIR"
 echo
 
 mkdir -p "$SKILLS_DIR"
 for skill in cv jobsearch candidature; do
   dest="$SKILLS_DIR/$skill"
-  if [[ -e "$dest" && $FORCE -eq 0 ]]; then
-    read -r -p "$dest existe déjà. Le remplacer ? [o/N] " reply
-    [[ "$reply" =~ ^[oOyY]$ ]] || { echo "  $skill conservé"; continue; }
+  backup=""
+  if [[ -e "$dest" ]]; then
+    if [[ $FORCE -eq 0 && -t 0 ]]; then
+      read -r -p "$dest existe déjà. Le remplacer ? (tes données ne sont pas touchées) [o/N] " reply
+      [[ "$reply" =~ ^[oOyY]$ ]] || { echo "  $skill conservé"; continue; }
+    fi
+    # la config du skill cv pointe vers le workspace de l'utilisateur, on la garde
+    [[ -f "$dest/config.json" ]] && backup="$(cat "$dest/config.json")"
+    rm -rf "$dest"
   fi
-  rm -rf "$dest"
   cp -r "$ROOT/$skill" "$dest"
+  [[ -n "$backup" ]] && printf '%s\n' "$backup" > "$dest/config.json"
   find "$dest" -name __pycache__ -type d -prune -exec rm -rf {} +
+  chmod +x "$dest"/scripts/*.py
   echo "  skill $skill installé"
 done
 
-# CV : templates à remplir, jamais écrasés.
-mkdir -p "$CV_DIR"
-for pair in "cv-master.template.md:cv-master.md" "profil.template.md:profil.md"; do
-  tpl="${pair%%:*}"; target="$CV_DIR/${pair##*:}"
-  if [[ -e "$target" ]]; then
-    echo "  ${pair##*:} existe déjà, conservé"
-  else
-    cp "$ROOT/cv/assets/$tpl" "$target"
-    echo "  ${pair##*:} créé (template vide)"
-  fi
-done
+python3 -c "import docx" 2>/dev/null || {
+  echo "  python-docx manquant, installation..."
+  python3 -m pip install --user python-docx lxml \
+    || echo "  échec : lance « pip install python-docx lxml » à la main"
+}
 
-# Recherche d'emploi : dossiers, config et .env modèles, jamais écrasés.
+echo
+python3 "$SKILLS_DIR/cv/scripts/init.py" ${INIT_ARGS[@]+"${INIT_ARGS[@]}"}
+echo
 python3 "$SKILLS_DIR/jobsearch/scripts/init.py"
 
 echo
-echo "Dépendances :"
-check_py() {
-  python3 -c "import $1" 2>/dev/null \
-    && printf "  %-14s OK\n" "$2" \
-    || printf "  %-14s manquant (%s)  ->  pip install %s\n" "$2" "$3" "$2"
-}
+echo "Dépendances facultatives :"
 check_cmd() {
   command -v "$1" >/dev/null \
-    && printf "  %-14s OK\n" "$1" \
-    || printf "  %-14s manquant (%s)  ->  %s\n" "$1" "$2" "$3"
+    && printf "  %-12s OK\n" "$1" \
+    || printf "  %-12s manquant (%s)  ->  %s\n" "$1" "$2" "$3"
 }
-check_py docx python-docx obligatoire
-check_py lxml lxml recommandé
-check_cmd pdftotext "recommandé, vérifie le PDF" "apt install poppler-utils / brew install poppler"
+check_cmd pdftotext "lecture des PDF" "apt install poppler-utils / brew install poppler"
 if command -v soffice >/dev/null || command -v libreoffice >/dev/null; then
-  printf "  %-14s OK\n" libreoffice
+  printf "  %-12s OK\n" libreoffice
 else
-  printf "  %-14s manquant (pas de PDF)  ->  apt install libreoffice-writer / brew install --cask libreoffice\n" libreoffice
+  printf "  %-12s manquant (pas de PDF)  ->  apt install libreoffice-writer / brew install --cask libreoffice\n" libreoffice
 fi
 check_cmd uv "LinkedIn et Indeed" "https://docs.astral.sh/uv/"
 check_cmd npx "navigateur de candidature" "installer Node.js"
 
 cat <<EOF
 
-Navigateur de candidature (facultatif, pour que Claude remplisse les formulaires) :
-  claude mcp add candidature -- npx -y @playwright/mcp@latest --browser chrome --user-data-dir "$HOME/.config/jobsearch/navigateur"
+Navigateur de candidature (pour que Claude remplisse les formulaires) :
+  claude mcp add candidature --scope user -- npx -y @playwright/mcp@latest --browser chrome --user-data-dir "$HOME/.config/jobsearch/navigateur"
   puis redémarrer Claude Code.
 
-Prochaine étape : lancer Claude Code et dire « crée mon CV ».
-Ensuite « lance la recherche d'emploi », puis « postule ».
+Prochaine étape : lancer Claude Code depuis ~/Documents/cv et dire « crée mon CV ».
 EOF

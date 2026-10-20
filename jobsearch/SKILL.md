@@ -28,7 +28,9 @@ encore vierge » / « lance init », ne lance aucune collecte : déroule l'onboa
 1. `python3 $JS/init.py` : crée les dossiers, `config.json` et `profile.json` (modèles
    vierges) et `~/.config/jobsearch/.env` (chmod 600). N'écrase jamais rien.
 2. Vérifie que `~/Documents/cv/cv-master.md` existe et est rempli
-   (`python3 $JS/init.py --check` le dit). Sinon, passe d'abord par le skill **cv**
+   (`python3 $JS/init.py --check` le dit). Si `~/.claude/skills/cv/config.json`
+   existe, le master est dans son `workspace` plutôt que dans `~/Documents/cv` :
+   les scripts le résolvent seuls, fais de même pour les chemins `~/Documents/cv/`. Sinon, passe d'abord par le skill **cv**
    en mode premier lancement, puis reviens ici.
 3. Entretien court, une question à la fois : domicile, zone acceptée pour le présentiel,
    jours sur site max, remote, contrats, métiers visés, salaire cible et minimum, ESN.

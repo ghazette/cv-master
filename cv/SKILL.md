@@ -16,27 +16,44 @@ pour une offre, on choisit lesquels remonter.
 
 ## Premier lancement (à vérifier avant toute autre action)
 
-Avant un audit, une adaptation ou une lettre, vérifie que le master existe et
-qu'il est rempli :
+Avant un audit, une adaptation ou une lettre, trouve le workspace et vérifie que
+le master est rempli :
 
 ```bash
-f=~/Documents/cv/cv-master.md
+CV=~/.claude/skills/cv
+cat $CV/config.json 2>/dev/null   # {"workspace": "..."}, écrit par init.py
+W=$(python3 -c "import json;print(json.load(open('$CV/config.json'))['workspace'])" 2>/dev/null || echo ~/Documents/cv)
+f=$W/cv-master.md
 [ ! -s "$f" ] || head -n 1 "$f" | grep -q '^<!-- TEMPLATE' && echo "onboarding"
 ```
 
-Si la commande affiche `onboarding`, le master est absent ou encore le modèle
-vide : **ne lance pas l'audit**, lis `references/onboarding.md` et déroule-le.
-Deux entrées possibles, au choix de l'utilisateur :
+**`config.json` absent** : le skill n'est pas initialisé. Demande à
+l'utilisateur s'il a déjà un CV (PDF, Word, texte, export LinkedIn en .zip ou
+dossier) et où il se trouve, puis lance :
 
-- **A, il a déjà un CV** (PDF, Word, texte, export LinkedIn) : extraction avec
-  `scripts/extract_cv.py`, puis questions ciblées sur les trous seulement.
+```bash
+python3 $CV/scripts/init.py --yes --cv <fichier>   # --cv facultatif, --workspace vaut ~/Documents/cv par défaut
+```
+
+C'est le seul point d'entrée : l'init crée le workspace, y dépose
+`cv-master.md` et `profil.md` avec leur marqueur `<!-- TEMPLATE` en première
+ligne, copie le CV d'origine dans `import/`, en extrait le texte dans
+`import/cv-extrait.txt` (via `scripts/extract_cv.py`, `--ocr` pour un scan) et
+écrit `config.json`. Un master déjà rempli n'est jamais écrasé.
+
+**La commande affiche `onboarding`** : le master est absent ou encore le modèle
+vide. **Ne lance pas l'audit**, lis `references/onboarding.md` et déroule-le :
+
+- **A, `import/cv-extrait.txt` existe** (ou l'utilisateur fournit un CV après
+  coup, à importer en relançant `init.py --cv`) : construction du master à
+  partir de ce texte, puis questions ciblées sur les trous seulement.
 - **B, il n'a rien** : entretien guidé en sept blocs courts (identité et
   contact, poste visé, expériences une par une, formation, compétences,
   langues, préférences), avec AskUserQuestion pour les choix fermés.
 
 Dans les deux cas : aucun fait inventé, chaque chiffre confirmé par
-l'utilisateur, écriture de `cv-master.md` et `profil.md` dans `~/Documents/cv/`
-(en retirant la ligne `<!-- TEMPLATE`), puis premier rendu et audit ATS.
+l'utilisateur, écriture de `cv-master.md` et `profil.md` dans `$W` (en retirant
+la ligne `<!-- TEMPLATE`), puis premier rendu et audit ATS.
 
 Si l'utilisateur colle une offre alors que le master est vide, dis-le-lui : on
 construit d'abord le master, l'offre servira juste après. Si seul `profil.md`
@@ -44,13 +61,15 @@ est absent ou modèle, fais seulement le bloc 7 de l'onboarding.
 
 ## Où vivent les fichiers
 
-Workspace : `~/Documents/cv/`.
+Workspace : le chemin de `$CV/config.json` (`~/Documents/cv` par défaut), noté
+`$W` ci-dessous.
 
 ```
-~/Documents/cv/
+$W/
 ├── cv-master.md           # source de vérité, tous les faits, jamais tronquée
 ├── profil.md              # préférences et posture, lu à chaque session
 ├── photo.png              # photo, optionnelle
+├── import/                # CV d'origine + cv-extrait.txt, lecture seule
 ├── build/                 # rendu du master (cv.docx, cv.pdf)
 └── <societe>/
     ├── cv.md              # projection ciblée (dérivée du master)
@@ -63,24 +82,26 @@ Le master ne rétrécit jamais. Si un fait est coupé d'une variante, il reste d
 le master : la prochaine offre en aura peut-être besoin.
 
 `profil.md` porte ce qui n'est pas un fait de CV mais oriente chaque rendu : cible
-de poste, secteurs visés, contraintes de mobilité, sujets sensibles à traiter en
-lettre, préférences de ton. Relis-le avant chaque adaptation.
+de poste, secteurs visés, contraintes de mobilité, objections à traiter en
+lettre, préférences de ton, signature. Relis-le avant chaque adaptation, et
+remplis ses sections vides en interrogeant l'utilisateur.
 
 ## La boucle
 
 ```bash
 CV=~/.claude/skills/cv
+W=$(python3 -c "import json;print(json.load(open('$CV/config.json'))['workspace'])" 2>/dev/null || echo ~/Documents/cv)
 
 # 1. rendre (docx + pdf + vérification d'extraction ATS)
-python3 $CV/scripts/build_cv.py ~/Documents/cv/cv-master.md --pdf
+python3 $CV/scripts/build_cv.py $W/cv-master.md --pdf
 
 # 2. auditer mécaniquement le rendu (--letter sur une lettre : pas de rubriques de CV)
-python3 $CV/scripts/ats_check.py ~/Documents/cv/build/cv.pdf
+python3 $CV/scripts/ats_check.py $W/build/cv.pdf
 
 # 3. auditer la signature IA des sources markdown, avant rendu
-python3 $CV/scripts/anti_ia_check.py ~/Documents/cv/<societe>/cv.md ~/Documents/cv/<societe>/lettre.md
+python3 $CV/scripts/anti_ia_check.py $W/<societe>/cv.md $W/<societe>/lettre.md
 
-# onboarding uniquement : extraire le texte d'un ancien CV
+# hors init : relire un autre document, comparer avec --layout, passer un scan en --ocr
 python3 $CV/scripts/extract_cv.py ~/chemin/ancien-cv.pdf
 ```
 
@@ -228,6 +249,6 @@ Le skill **jobsearch** trouve et classe les offres en se fondant sur
 `cv-master.md` : un master rempli est donc le préalable à toute veille. Quand
 l'utilisateur choisit une offre, l'adaptation du CV et la lettre se font ici.
 L'envoi effectif de la candidature relève du skill **candidature**. Les
-fichiers à joindre sont ceux de `~/Documents/cv/<societe>/build/`. Avant l'envoi,
+fichiers à joindre sont ceux de `$W/<societe>/build/`. Avant l'envoi,
 copie-les sous leur nom définitif dans `build/envoi/` (`CV_Prenom_Nom.pdf`,
 `Lettre_Prenom_Nom.pdf`) : le recruteur voit ce nom, pas `cv.pdf`.

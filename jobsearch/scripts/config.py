@@ -25,7 +25,18 @@ from typing import Any
 SKILL_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = Path(os.environ.get("JOBSEARCH_DIR", Path.home() / "Documents" / "jobsearch"))
 ENV_FILE = Path(os.environ.get("JOBSEARCH_ENV", Path.home() / ".config" / "jobsearch" / ".env"))
-CV_MASTER = Path(os.environ.get("JOBSEARCH_CV_MASTER", Path.home() / "Documents" / "cv" / "cv-master.md"))
+CV_CONFIG = Path.home() / ".claude" / "skills" / "cv" / "config.json"
+
+
+def cv_workspace() -> Path:
+    """Workspace du skill cv (config.json écrit par son init.py), sinon ~/Documents/cv."""
+    try:
+        return Path(json.loads(CV_CONFIG.read_text(encoding="utf-8"))["workspace"]).expanduser()
+    except (OSError, ValueError, KeyError, TypeError):
+        return Path.home() / "Documents" / "cv"
+
+
+CV_MASTER = Path(os.environ.get("JOBSEARCH_CV_MASTER", cv_workspace() / "cv-master.md"))
 TEMPLATE_CONFIG = SKILL_DIR / "assets" / "config.default.json"
 TEMPLATE_PROFILE = SKILL_DIR / "assets" / "profile.default.json"
 

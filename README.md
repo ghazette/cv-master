@@ -12,10 +12,11 @@ Trois skills qui s'enchaînent, en partant de zéro (pas de CV, aucune info) :
 
 ```bash
 git clone <url-du-depot> && cd <dossier>
-./install.sh
+./install.sh                      # sans CV
+./install.sh --cv ~/mon-cv.pdf    # avec un ancien CV (pdf, docx, odt, txt)
 ```
 
-Dépendances : `python3`, `pip install python-docx lxml`, LibreOffice et poppler-utils pour le PDF, `uv` pour LinkedIn/Indeed, Node.js pour le navigateur. `install.sh` dit ce qui manque.
+Dépendances : `python3` et `python-docx` (installé si absent), LibreOffice et poppler-utils pour le PDF, `uv` pour LinkedIn/Indeed, Node.js pour le navigateur. `install.sh` dit ce qui manque.
 
 ## Utilisation
 

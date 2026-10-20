@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Extrait le texte brut d'un CV existant, pour l'onboarding (references/onboarding.md).
 
+init.py appelle ce module pour écrire <workspace>/import/cv-extrait.txt : c'est
+le chemin normal. Le lancer seul sert à relire un document à part, à comparer
+avec --layout, ou à passer un scan en --ocr.
+
     python3 extract_cv.py ancien-cv.pdf
     python3 extract_cv.py ancien-cv.docx
     python3 extract_cv.py Profile.pdf                    # LinkedIn, « Enregistrer au format PDF »
@@ -47,6 +51,11 @@ LINKEDIN = [
 ]
 
 SEUIL_SCAN = 200
+IMAGES = (".png", ".jpg", ".jpeg", ".tif", ".tiff", ".webp")
+
+
+class ExtractError(Exception):
+    """Extraction impossible : outil absent ou format non géré."""
 
 
 def docx_paragraphs(xml: bytes) -> list[str]:
@@ -103,7 +112,7 @@ def from_odt(path: Path) -> str:
 
 def from_pdf(path: Path, layout=False) -> str:
     if not shutil.which("pdftotext"):
-        sys.exit("pdftotext absent : installer poppler-utils, ou coller le texte du CV dans le chat")
+        raise ExtractError("pdftotext absent : installer poppler-utils, ou coller le texte du CV dans le chat")
     cmd = ["pdftotext"] + (["-layout"] if layout else []) + [str(path), "-"]
     return subprocess.run(cmd, capture_output=True, text=True).stdout
 
@@ -111,7 +120,7 @@ def from_pdf(path: Path, layout=False) -> str:
 def from_office(path: Path) -> str:
     soffice = shutil.which("soffice") or shutil.which("libreoffice")
     if not soffice:
-        sys.exit(f"{path.suffix} illisible sans LibreOffice : réenregistrer en .docx ou .pdf")
+        raise ExtractError(f"{path.suffix} illisible sans LibreOffice : réenregistrer en .docx ou .pdf")
     with tempfile.TemporaryDirectory() as tmp:
         subprocess.run([soffice, "--headless", "--convert-to", "txt:Text",
                         "--outdir", tmp, str(path)], capture_output=True, check=False)
@@ -121,8 +130,8 @@ def from_office(path: Path) -> str:
 
 def ocr(path: Path) -> str:
     if not shutil.which("tesseract"):
-        sys.exit("tesseract absent : installer tesseract-ocr et tesseract-ocr-fra, "
-                 "ou coller le texte du CV dans le chat")
+        raise ExtractError("tesseract absent : installer tesseract-ocr et tesseract-ocr-fra, "
+                           "ou coller le texte du CV dans le chat")
     with tempfile.TemporaryDirectory() as tmp:
         images = [path]
         if path.suffix.lower() == ".pdf":
@@ -174,6 +183,35 @@ def from_linkedin_dir(path: Path) -> str:
     return linkedin_tables(read)
 
 
+def extract(path: Path, use_ocr=False, layout=False) -> str:
+    """Texte brut du document, ou ExtractError."""
+    suffix = path.suffix.lower()
+    if use_ocr:
+        return ocr(path)
+    if path.is_dir():
+        return from_linkedin_dir(path)
+    if suffix == ".zip":
+        return from_linkedin_zip(path)
+    if suffix == ".pdf":
+        return from_pdf(path, layout=layout)
+    if suffix == ".docx":
+        return from_docx(path)
+    if suffix == ".odt":
+        return from_odt(path)
+    if suffix in (".doc", ".rtf", ".pages", ".wps"):
+        return from_office(path)
+    if suffix in (".txt", ".md", ".text", ""):
+        return path.read_text(encoding="utf-8", errors="replace")
+    if suffix in IMAGES:
+        raise ExtractError("image : relancer avec --ocr (tesseract requis), ou coller le texte")
+    raise ExtractError(f"format {suffix} non géré : l'exporter en .pdf ou .docx")
+
+
+def looks_scanned(path: Path, text: str, use_ocr=False) -> bool:
+    """Seul un PDF peu bavard trahit un scan, un export LinkedIn court est normal."""
+    return path.suffix.lower() == ".pdf" and not use_ocr and len(text.strip()) < SEUIL_SCAN
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     flags = {a for a in sys.argv[1:] if a.startswith("--")}
@@ -185,33 +223,15 @@ def main():
         print(f"introuvable : {path}", file=sys.stderr)
         return 2
 
-    suffix = path.suffix.lower()
-    if "--ocr" in flags:
-        text = ocr(path)
-    elif path.is_dir():
-        text = from_linkedin_dir(path)
-    elif suffix == ".zip":
-        text = from_linkedin_zip(path)
-    elif suffix == ".pdf":
-        text = from_pdf(path, layout="--layout" in flags)
-    elif suffix == ".docx":
-        text = from_docx(path)
-    elif suffix == ".odt":
-        text = from_odt(path)
-    elif suffix in (".doc", ".rtf", ".pages", ".wps"):
-        text = from_office(path)
-    elif suffix in (".txt", ".md", ".text", ""):
-        text = path.read_text(encoding="utf-8", errors="replace")
-    elif suffix in (".png", ".jpg", ".jpeg", ".tif", ".tiff", ".webp"):
-        print("image : relancer avec --ocr (tesseract requis), ou coller le texte", file=sys.stderr)
-        return 1
-    else:
-        print(f"format {suffix} non géré : l'exporter en .pdf ou .docx", file=sys.stderr)
-        return 2
+    use_ocr = "--ocr" in flags
+    try:
+        text = extract(path, use_ocr=use_ocr, layout="--layout" in flags)
+    except ExtractError as error:
+        print(error, file=sys.stderr)
+        return 1 if path.suffix.lower() in IMAGES else 2
 
     print(text.strip())
-    # seul un PDF peu bavard trahit un scan, un export LinkedIn court est normal
-    if suffix == ".pdf" and "--ocr" not in flags and len(text.strip()) < SEUIL_SCAN:
+    if looks_scanned(path, text, use_ocr):
         print(f"\n! {len(text.strip())} caractères seulement : document probablement scanné "
               "ou en image. Relancer avec --ocr, ou demander à l'utilisateur de coller le texte.",
               file=sys.stderr)

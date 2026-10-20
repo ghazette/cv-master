@@ -85,8 +85,13 @@ PROFIL=~/Documents/jobsearch/candidature/profil-candidature.json
 Fais ces vérifications à chaque début de session. Si l'une échoue, traite-la avant tout
 envoi, dans cet ordre.
 
+Le workspace du skill cv est `~/Documents/cv` par défaut. Si
+`~/.claude/skills/cv/config.json` existe, lis-le dans sa clé `workspace` et remplace
+`~/Documents/cv` par ce chemin partout dans ce skill.
+
 ```bash
-test -f ~/Documents/cv/cv-master.md && echo "cv-master OK"
+W=$(python3 -c "import json,os;print(json.load(open(os.path.expanduser('~/.claude/skills/cv/config.json')))['workspace'])" 2>/dev/null || echo ~/Documents/cv)
+test -f "$W/cv-master.md" && echo "cv-master OK"
 test -f ~/Documents/jobsearch/config.json && echo "jobsearch OK"
 test -f ~/Documents/jobsearch/candidature/profil-candidature.json && echo "profil OK"
 claude mcp get candidature

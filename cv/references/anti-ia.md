@@ -10,7 +10,7 @@ cadratin et sans point-virgule.
 
 Priorité en cas d'hésitation : **entre une phrase élégante et une phrase
 spécifique, prendre la spécifique**. L'objectif n'est pas un texte bien écrit,
-c'est un texte que seul l'utilisateur aurait pu écrire.
+c'est un texte que seul le candidat aurait pu écrire.
 
 Contrôle mécanique : `python3 $CV/scripts/anti_ia_check.py <fichier.md>`.
 Le script compte ce qui se compte. Le reste relève du jugement, avec ce fichier.
@@ -20,7 +20,7 @@ Le script compte ce qui se compte. Le reste relève du jugement, avec ce fichier
 ## Articulation avec « Zéro invention »
 
 Rien ici n'autorise à fabriquer. Le détail concret qui rend un texte humain doit
-sortir de l'utilisateur, pas du modèle. Quand il manque, la conduite est de **poser
+sortir du candidat, pas du modèle. Quand il manque, la conduite est de **poser
 une question**, jamais de combler avec un adjectif ou un chiffre plausible.
 
 Un chiffre halluciné détruit plus de crédibilité que dix lignes plates, et il
@@ -192,9 +192,8 @@ compétence est réelle, elle doit déjà exister dans le master.
 
 ## Ce qui n'est pas un marqueur : la signature assumée
 
-Une lettre peut se signer « Prénom Nom & Claude », si `profil.md` porte cette
-consigne explicite.
-Ce fichier traque les marqueurs involontaires, ceux d'un texte présenté comme
+Si `profil.md` définit une signature qui mentionne Claude (par exemple
+« Prénom Nom & Claude »), elle est une consigne explicite du candidat. Ce fichier traque les marqueurs involontaires, ceux d'un texte présenté comme
 entièrement écrit par son auteur. Une mention revendiquée ne relève pas de cette
 catégorie et ne se retire pas. Le reste du fichier s'applique sans changement :
 l'objectif n'est pas de dissimuler l'outil, c'est d'écrire une lettre qui dise
@@ -259,11 +258,12 @@ ceci. Au moins quatre par candidature, tous issus de faits réels du master.
    Le problème était que, suivie d'un fait et jamais d'une généralité.
 6. **Le registre parlé maîtrisé.** Une tournure orale par lettre, pas plus.
 
-Trois exemples du niveau de texture visé :
+Exemples de textures qui fonctionnent, à prendre comme étalon :
 
 - `je suis à l'aise sans procédure écrite`, affirmation qui prend un risque
 - l'enchaînement activité annexe autonome vers disponibilité pour un temps plein,
-  qui répond à une objection que le recruteur n'a pas posée
+  qui répond à une objection que le recruteur n'a pas posée (voir « Objections à
+  traiter de face » dans `profil.md`)
 - `Ressaisie des 1 200 fiches patients après la panne du serveur de mars`,
   trop spécifique pour avoir été inventé
 

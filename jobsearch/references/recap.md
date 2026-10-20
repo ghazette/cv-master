@@ -38,7 +38,7 @@ Exemple fictif :
   "client_final": "Acme Assurances",
   "aussi_appele": ["Acme"],
   "envoye_le": "2026-10-15T10:32",
-  "contacts": [{"nom": "Camille Durand", "role": "chargée de recrutement", "tel": "06 00 00 00 00", "email": ""}],
+  "contacts": [{"nom": "Camille Durand", "role": "chargée de recrutement", "tel": "06 12 34 56 78", "email": ""}],
   "reponses_formulaire": {"Prétentions": "48 k€ brut annuel", "Disponibilité": "immédiate"},
   "capture": "captures/2026-10-15-acme-dev-backend.png",
   "fiche": {

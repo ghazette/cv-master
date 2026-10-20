@@ -28,7 +28,7 @@ from filters import norm  # noqa: E402
 from jobs import salary_label  # noqa: E402
 
 FICHES_DIR = DATA_DIR / "candidatures"
-CV_DIR = CV_MASTER.parent  # dossiers de candidature du skill cv : ~/Documents/cv/<dossier>/build
+CV_DIR = CV_MASTER.parent  # dossiers de candidature du skill cv : <workspace cv>/<dossier>/build
 REQUIRED = ("uid", "dossier", "canal")
 
 

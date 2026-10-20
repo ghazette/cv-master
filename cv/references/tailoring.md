@@ -86,7 +86,7 @@ rappeler, il descend simplement dans la hiérarchie de lecture.
 
 ## 4. Livrables
 
-Dans `~/Documents/cv/<societe>/` :
+Dans `<workspace>/<societe>/` :
 
 - `cv.md` plus `build/cv.docx` et `build/cv.pdf`,
 - `mots-cles.md`, les 40 mots-clés en trois colonnes (présent, ajouté, gap), les

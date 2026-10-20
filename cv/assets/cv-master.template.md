@@ -1,4 +1,4 @@
-<!-- TEMPLATE : master pas encore rempli. Tant que cette ligne existe, le skill cv lance l'onboarding (references/onboarding.md) au lieu de l'audit, et build_cv.py refuse de rendre. La supprimer une fois le master rempli. -->
+<!-- TEMPLATE : master pas encore rempli. Tant que cette ligne existe, le skill cv lance l'onboarding (references/onboarding.md, à partir de import/cv-extrait.txt s'il existe) au lieu de l'audit, et build_cv.py refuse de rendre. La supprimer une fois le master rempli. -->
 ---
 name: Prénom Nom
 title: Intitulé du poste visé · Compétence clé 1 · Compétence clé 2 · Compétence clé 3
@@ -9,7 +9,7 @@ photo: photo.png
 <!--
 Ceci est le MASTER. Il contient tous les faits vérifiables et ne rétrécit jamais.
 On n'envoie jamais ce fichier tel quel : chaque candidature en dérive une
-projection dans ~/Documents/cv/<societe>/cv.md.
+projection dans <workspace>/<societe>/cv.md.
 
 Front matter :
 - name : prénom et nom, rien d'autre.
@@ -17,8 +17,8 @@ Front matter :
   de ce métier citent. C'est le premier signal lu par un ATS.
 - contact : e-mail, téléphone, ville ou zone (jamais l'adresse complète),
   disponibilité. Un lien LinkedIn ou portfolio peut s'ajouter, séparé par « · ».
-- photo : nom du fichier image posé dans ~/Documents/cv/. Retirer la ligne s'il
-  n'y a pas de photo. Sur le marché anglo-saxon, ni photo ni date de naissance.
+- photo : nom du fichier image posé dans le workspace (~/Documents/cv/ par
+  défaut). Retirer la ligne s'il n'y a pas de photo. Sur le marché anglo-saxon, ni photo ni date de naissance.
 
 Les commentaires HTML comme celui-ci ne sont jamais rendus dans le .docx.
 Syntaxe complète : references/cv-markdown.md
